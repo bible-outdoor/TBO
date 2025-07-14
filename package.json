@@ -1,0 +1,21 @@
+{
+  "name": "bible-outdoor",
+  "version": "1.0.0",
+  "description": "Bible Outdoor Church Website",
+  "main": "bible outdoor/admin-backend/index.js",
+  "scripts": {
+    "start": "cd \"bible outdoor/admin-backend\" && node index.js",
+    "install-deps": "cd \"bible outdoor/admin-backend\" && npm install",
+    "build": "cd \"bible outdoor/admin-backend\" && npm install"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bible-outdoor/bible-outdoor.git"
+  },
+  "keywords": ["church", "website", "bible", "outdoor"],
+  "author": "Bible Outdoor",
+  "license": "MIT"
+}
