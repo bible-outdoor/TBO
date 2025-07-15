@@ -1,0 +1,13 @@
+.media-title {
+  font-weight: bold;
+  display: block;
+}
+.media-date {
+  color: #888;
+  font-size: 0.98em;
+  margin-top: 2px;
+}
+.media-caption {
+  margin-top: 5px;
+  text-align: left;
+}

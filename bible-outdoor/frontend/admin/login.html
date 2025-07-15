@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Login | The Bible Outdoor</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <link rel="icon" type="image/x-icon" href="../assets/favicon.ico" />
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+  <div class="admin-login-container">
+    <div style="display: flex; flex-direction: column; align-items: center; width: 100%; max-width: 420px;">
+      <!-- Invitation info, hidden by default, shown if token is present -->
+      <div id="invitationInfo" style="display:none; margin-bottom:16px; background:#e6f7ff; border:1px solid #91d5ff; padding:12px 16px; border-radius:7px; color:#222; font-size:1.04em; text-align:center;">
+        <strong>Welcome!</strong> Please login using the default password provided in your invitation email. This link will expire in 30 minutes.
+      </div>
+      <form class="admin-login-form" id="adminLoginForm" autocomplete="off">
+        <h2 id="formTitle">Admin Login</h2>
+        <input type="email" id="adminEmail" placeholder="Gmail address" required>
+        <input type="password" id="adminPass" placeholder="Password" required style="width:calc(100% - 36px);display:inline-block;">
+        <span id="toggleAdminPass" style="position:relative;left:-32px;cursor:pointer;vertical-align:middle;" title="Show/Hide Password">👁️</span>
+        <button type="submit" id="formBtn">Login</button>
+        <div class="admin-login-msg" id="adminLoginMsg"></div>
+        <div class="default-info"></div>
+      </form>
+    </div>
+  </div>
+  <script src="admin.js"></script>
+  <script>
+    // Show invitation info if token is present in URL
+    if (window.location.search.includes('token=')) {
+      document.getElementById ('invitationInfo').style.display = 'block';
+    }
+    // Password visibility toggle
+    const adminPass = document.getElementById('adminPass');
+    const toggleAdminPass = document.getElementById('toggleAdminPass');
+    if (adminPass && toggleAdminPass) {
+      toggleAdminPass.addEventListener('click', function() {
+        if (adminPass.type === 'password') {
+          adminPass.type = 'text';
+          toggleAdminPass.textContent = '🙈';
+        } else {
+          adminPass.type = 'password';
+          toggleAdminPass.textContent = '👁️';
+        }
+      });
+    }
+  </script>
+</body>
+</html>

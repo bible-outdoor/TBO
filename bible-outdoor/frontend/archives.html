@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Archives – The Bible Outdoor</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="Media archives for The Bible Outdoor: video and image galleries." />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/mediagallery.css">
+  <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+
+</head>
+<body>
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <div class="nav-logo">
+      <img src="assets/logo3.png" alt="The Bible Outdoor Logo" />
+      <span>The Bible Outdoor</span>
+    </div>
+    <button class="nav-toggle" aria-label="Open navigation">&#9776;</button>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="sermon.html">Sermon</a></li>
+      <li><a href="training.html">Training</a></li>
+      <li><a class="active" href="archives.html">Archives</a></li>
+      <li><a href="notifications.html">Notifications</a></li>
+      <li><a href="contacts.html">Contacts</a></li>
+      <li><a href="donation.html">Donation</a></li>
+      <li><a href="your-health.html" target="_blank">Your Health</a></li>
+      <li>
+        <button id="logout-btn" class="nav-logout" style="display: none;" aria-label="Logout">
+          <img src="assets/logout.png" alt="Logout" />
+        </button>
+      </li>
+
+    </ul>
+    <span id="welcome-name" style="color: var(--primary); margin-left: 1rem;"></span>
+    <button id="modeToggle" class="mode-toggle" aria-label="Toggle dark/light mode"></button>
+  </nav>
+  <main>
+    <section class="hero" style="flex-direction:column;text-align:center;">
+      <h1>Media Archives</h1>
+      <p>Browse our collection of event videos and images.</p>
+    </section>
+    <section style="max-width:1000px;margin:2em auto;">
+      <label for="filter-type">Filter:</label>
+      <select id="filter-type">
+        <option value="all">All</option>
+        <option value="video">Video</option>
+        <option value="image">Image</option>
+      </select>
+      <label for="filter-year" style="margin-left:2em;">Year:</label>
+      <select id="filter-year">
+        <option value="all">All</option>
+        <option value="2025">2025</option>
+        <option value="2024">2024</option>
+      </select>
+      <div id="galleryGrid" class="media-grid">
+    </section>
+  </main>
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-links">
+      <a href="index.html">Home</a> |
+      <a href="about.html">About</a> |
+      <a href="sermon.html">Sermon</a> |
+      <a href="training.html">Training</a> |
+      <a href="archives.html">Archives</a> |
+      <a href="notifications.html">Notifications</a> |
+      <a href="contacts.html">Contacts</a> |
+      <a href="donation.html">Donation</a>
+    </div>
+    <div class="footer-contact">
+      <div>Sigalagala along Kisumu-Kakamega Highway</div>
+      <div>📞 +254719321445 | ✉️ justinebiceptrainer@gmail.com</div>
+      <div>
+        <a href="https://www.tiktok.com/@nm_jus?_=ZM-8x3slnitC5t&_r=1" aria-label="Tiktok" target="_blank"><img src="assets/tiktok2.png" alt=""></a>
+        <a href="https://www.facebook.com/justine.mwakati" aria-label="Facebook" target="_blank"><img src="assets/facebook2.png" alt=""></a>
+        <a href="https://www.youtube.com/@justinenm" aria-label="Youtube" target="_blank"><img src="assets/youtube.png" alt=""></a>
+
+      </div>      
+      <div>&copy; 2025 The Bible Outdoor. All Rights Reserved.</div>
+    </div>
+  </footer>
+  
+  <!-- Lightbox Modal -->
+<!-- Lightbox Modal -->
+<div id="lightbox-modal" style="display:none;position:fixed;z-index:99999;left:0;top:0;width:100vw;height:100vh;background:rgba(0,0,0,0.86);align-items:center;justify-content:center;">
+  <span id="lightbox-close" style="position:absolute;top:2vw;right:3vw;font-size:2.5rem;color:#fff;cursor:pointer;font-weight:bold;">&times;</span>
+  <span id="lightbox-prev" style="position:absolute;left:2vw;top:50%;transform:translateY(-50%);font-size:3rem;color:#fff;cursor:pointer;font-weight:bold;">&#10094;</span>
+  <span id="lightbox-next" style="position:absolute;right:2vw;top:50%;transform:translateY(-50%);font-size:3rem;color:#fff;cursor:pointer;font-weight:bold;">&#10095;</span>
+  <div id="lightbox-content" style="max-width:92vw;max-height:92vh;border-radius:1.1rem;box-shadow:0 4px 32px #0009;display:block;"></div>
+</div>
+
+
+  <script src="scripts/media.js"></script>
+  
+  
+  <script>
+  </script>
+<script src="scripts/lightbox.js"></script>
+
+  
+  
+  <script src="js/main.js"></script>
+
+</body>
+</html>

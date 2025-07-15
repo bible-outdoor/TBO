@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Sermon – The Bible Outdoor</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="Daily and weekly Bible verses and Sunday sermons at The Bible Outdoor." />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+</head>
+<body>
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <div class="nav-logo">
+      <img src="assets/logo3.png" alt="The Bible Outdoor Logo" />
+      <span>The Bible Outdoor</span>
+    </div>
+    <button class="nav-toggle" aria-label="Open navigation">&#9776;</button>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a class="active" href="sermon.html">Sermon</a></li>
+      <li><a href="training.html">Training</a></li>
+      <li><a href="archives.html">Archives</a></li>
+      <li><a href="notifications.html">Notifications</a></li>
+      <li><a href="contacts.html">Contacts</a></li>
+      <li><a href="donation.html">Donation</a></li>
+      <li><a href="your-health.html" target="_blank">Your Health</a></li>
+      <li>
+        <button id="logout-btn" class="nav-logout" style="display: none;" aria-label="Logout">
+          <img src="assets/logout.png" alt="Logout" />
+        </button>
+      </li>
+
+    </ul>
+    <span id="welcome-name" style="color: var(--primary); margin-left: 1rem;"></span>
+    <button id="modeToggle" class="mode-toggle" aria-label="Toggle dark/light mode"></button>
+  </nav>
+  <main>
+    <section class="mission-belief" style="margin-top:2rem;">
+      <div>
+        <h3>Daily Bible Verse</h3>
+        <p><strong>Psalm 23:1</strong></p>
+        <blockquote>The Lord is my shepherd; I shall not want.</blockquote>
+        <p>Trust in God’s provision and guidance for every step of your life.</p>
+      </div>
+      <div>
+        <h3>Weekly Bible Verse</h3>
+        <p><strong>Romans 8:28</strong></p>
+        <blockquote>And we know that in all things God works for the good of those who love him, who have been called according to his purpose.</blockquote>
+        <p>God can turn every circumstance for your good when you walk in His love.</p>
+      </div>
+    </section>
+    <section class="hero" style="margin-top:2rem;flex-direction:column;text-align:center;">
+      <h3>Sunday Sermon</h3>
+      <div id="sermon-video-container">
+        <!-- JS will fill this -->
+      </div>
+      <div style="background:var(--sky);border-radius:1em;padding:1em;margin-top:1em;">
+        <p>As a registered member, you will receive sermon updates directly to your Gmail.</p>
+      </div>
+    </section>
+    <section class="verses" style="margin-top:2rem;">
+      <div id="daily-verse" class="verse-container"></div>
+      <div id="weekly-verse" class="verse-container"></div>
+    </section>
+  </main>
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-links">
+      <a href="index.html">Home</a> |
+      <a href="about.html">About</a> |
+      <a href="sermon.html">Sermon</a> |
+      <a href="training.html">Training</a> |
+      <a href="archives.html">Archives</a> |
+      <a href="notifications.html">Notifications</a> |
+      <a href="contacts.html">Contacts</a> |
+      <a href="donation.html">Donation</a>
+    </div>
+    <div class="footer-contact">
+      <div>Sigalagala along Kisumu-Kakamega Highway</div>
+      <div>📞 +254719321445 | ✉️ justinebiceptrainer@gmail.com</div>
+      <div>
+        <a href="https://www.tiktok.com/@nm_jus?_=ZM-8x3slnitC5t&_r=1" aria-label="Tiktok" target="_blank"><img src="assets/tiktok2.png" alt=""></a>
+        <a href="https://www.facebook.com/justine.mwakati" aria-label="Facebook" target="_blank"><img src="assets/facebook2.png" alt=""></a>
+        <a href="https://www.youtube.com/@justinenm" aria-label="Youtube" target="_blank"><img src="assets/youtube.png" alt=""></a>
+
+      </div>      
+      <div>&copy; 2025 The Bible Outdoor. All Rights Reserved.</div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+
+</body>
+</html>

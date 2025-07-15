@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Contacts – The Bible Outdoor</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="Contact the Pastor at The Bible Outdoor." />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+</head>
+<body>
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <div class="nav-logo">
+      <img src="assets/logo3.png" alt="The Bible Outdoor Logo" />
+      <span>The Bible Outdoor</span>
+    </div>
+    <button class="nav-toggle" aria-label="Open navigation">&#9776;</button>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="sermon.html">Sermon</a></li>
+      <li><a href="training.html">Training</a></li>
+      <li><a href="archives.html">Archives</a></li>
+      <li><a href="notifications.html">Notifications</a></li>
+      <li><a class="active" href="contacts.html">Contacts</a></li>
+      <li><a href="donation.html">Donation</a></li>
+      <li><a href="your-health.html" target="_blank">Your Health</a></li>
+      <li>
+        <button id="logout-btn" class="nav-logout" style="display: none;" aria-label="Logout">
+          <img src="assets/logout.png" alt="Logout" />
+        </button>
+      </li>
+    </ul>
+    <span id="welcome-name" style="color: var(--primary); margin-left: 1rem;"></span>
+    <button id="modeToggle" class="mode-toggle" aria-label="Toggle dark/light mode"></button>
+  </nav>
+  <main>
+    <section class="hero" style="flex-direction:column;text-align:center;">
+      <h1>Contact the Pastor</h1>
+      <div id="contact-content">
+        <!-- JS will determine what to show -->
+      </div>
+    </section>
+    <div id="testimony-section" style="text-align:center; margin-top: 2em; display: none;">
+      <button id="testimony-btn" style="background: var(--gold); color: var(--dark); font-weight: bold; border: none; padding: 0.7em 1.5em; border-radius: 2em; cursor: pointer;">
+        Share Your Testimony
+      </button>
+    </div>
+  </main>
+  <div id="testimony-modal" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.7);backdrop-filter:blur(2px);z-index:9999;align-items:center;justify-content:center;">
+    <div style="background:var(--white);padding:1.5em;border-radius:1em;max-width:500px;width:90vw;box-shadow:0 4px 20px #0005;">
+      <h2 style="margin-top:0;color:var(--primary);text-align:center;">Submit Your Testimony</h2>
+      <form id="testimony-form" style="display:flex;flex-direction:column;gap:1em;margin-top:1em;">
+        <textarea id="testimony-message" rows="5" placeholder="Your testimony..." required style="padding:0.7em;border-radius:1em;border:1px solid var(--soft-gray);resize:vertical;"></textarea>
+        <button type="submit" style="background: var(--primary); color: white; padding: 0.6em 1.2em; border: none; border-radius: 1em; font-weight: bold; cursor: pointer;">Send Testimony</button>
+        <button type="button" id="close-testimony-modal" style="background: #ccc; color: #222; padding: 0.5em 1em; border: none; border-radius: 1em; cursor: pointer;">Cancel</button>
+        <div id="testimony-success" style="display:none; text-align:center; font-size:0.95em; color:var(--primary); margin-top:0.5em;"></div>
+      </form>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-links">
+      <a href="index.html">Home</a> |
+      <a href="about.html">About</a> |
+      <a href="sermon.html">Sermon</a> |
+      <a href="training.html">Training</a> |
+      <a href="archives.html">Archives</a> |
+      <a href="notifications.html">Notifications</a> |
+      <a href="contacts.html">Contacts</a> |
+      <a href="donation.html">Donation</a>
+    </div>
+    <div class="footer-contact">
+      <div>Sigalagala along Kisumu-Kakamega Highway</div>
+      <div>📞 +254719321445 | ✉️ justinebiceptrainer@gmail.com</div>
+      <div>
+        <a href="https://www.tiktok.com/@nm_jus?_=ZM-8x3slnitC5t&_r=1" aria-label="Tiktok" target="_blank"><img src="assets/tiktok2.png" alt=""></a>
+        <a href="https://www.facebook.com/justine.mwakati" aria-label="Facebook" target="_blank"><img src="assets/facebook2.png" alt=""></a>
+        <a href="https://www.youtube.com/@justinenm" aria-label="Youtube" target="_blank"><img src="assets/youtube.png" alt=""></a>
+
+      </div>      
+      <div>&copy; 2025 The Bible Outdoor. All Rights Reserved.</div>
+    </div>
+  </footer>
+  <script src="scripts/contacts.js"></script>
+  <script src="scripts/testimony.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    function isLoggedIn() {
+      const token = localStorage.getItem("tbo_member_jwt");
+      const member = localStorage.getItem("tbo_member");
+      return token && member;
+    }
+
+    function renderContactForm() {
+      const container = document.getElementById("contact-content");
+      if (!container) return;
+
+      if (isLoggedIn()) {
+        const member = JSON.parse(localStorage.getItem("tbo_member"));
+        container.innerHTML = `
+          <form id="contact-form" style="background:var(--sky);border-radius:1em;display:inline-block;text-align:left;max-width:380px;padding:1.5em;margin-top:1em;">
+            <input type="text" name="subject" placeholder="Subject (optional)" style="width:100%;margin-bottom:1em;padding:0.7em;border-radius:1em;border:1px solid var(--soft-gray);font-size:1em;" />
+            <textarea name="message" required placeholder="Your message" rows="5" style="width:100%;margin-bottom:1em;padding:0.7em;border-radius:1em;border:1px solid var(--soft-gray);font-size:1em;"></textarea>
+            <button type="submit" style="background:var(--gold);color:var(--dark);border:none;border-radius:1em;font-weight:bold;padding:0.7em 2em;cursor:pointer;font-size:1em;">Send</button>
+          </form>
+          <div id="form-message" style="display:none; margin-top: 1em; font-size:0.95em; padding:0.6em 0.9em; border-radius:0.8em;"></div>
+        `;
+        document.getElementById("testimony-section").style.display = "block";
+      } else {
+        container.innerHTML = `
+          <p style="color:var(--primary);font-weight:500;font-size:1.1em;">
+            Only registered members can contact the pastor.<br>
+            Please <a href="index.html#login" style="color:var(--gold);text-decoration:underline;" id="login-link">Login here</a> to continue.
+          </p>
+        `;
+        document.getElementById("testimony-section").style.display = "none";
+      }
+
+      // Attach form handler
+      const form = document.getElementById("contact-form");
+      const messageBox = document.getElementById("form-message");
+      if (form && messageBox) {
+        form.onsubmit = function (e) {
+          e.preventDefault();
+          const subject = form.subject.value || "";
+          const message = form.message.value.trim();
+
+          const member = JSON.parse(localStorage.getItem("tbo_member"));
+          if (member && message) {
+            // Send to backend
+            fetch('https://bible-outdoor-backend.onrender.com/api/contacts', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                name: member.name,
+                email: member.email,
+                subject,
+                message
+              })
+            }).then(() => {
+              form.reset();
+              messageBox.textContent = "📩 Your message has been sent to the Pastor. Thank you!";
+              messageBox.style.display = "block";
+              messageBox.style.background = 'var(--sky)';
+              messageBox.style.color = 'var(--primary)';
+              messageBox.style.border = '1px solid var(--primary)';
+              setTimeout(() => {
+                messageBox.style.display = 'none';
+              }, 6000);
+            });
+
+            // Open Gmail compose for admin reply (admin's email is hardcoded here)
+            const adminEmail = "justinebiceptrainer@gmail.com";
+            const mailSubject = encodeURIComponent(subject ? subject : "Message from Bible Outdoor Contact Form");
+            const mailBody = encodeURIComponent(
+              `Message from: ${member.name} (${member.email})\n\n${message}`
+            );
+            window.open(`https://mail.google.com/mail/?view=cm&fs=1&to=${adminEmail}&su=${mailSubject}&body=${mailBody}`, "_blank");
+          }
+        };
+      }
+    }
+
+    // Initial render
+    renderContactForm();
+
+    // Live update on login/logout
+    window.addEventListener('storage', renderContactForm);
+    window.addEventListener('siteSettingsUpdated', renderContactForm);
+
+    document.addEventListener('click', function(e) {
+      if (e.target && e.target.id === 'login-link') {
+        window.location.href = 'index.html#login';
+      }
+    });
+  </script>
+  
+</body>
+</html>

@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>the Bible Outdoor</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="The Bible Outdoor - A spiritual movement bringing people closer to the Word of God in open environments." />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+
+</head>
+<body>
+  
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <div class="nav-logo">
+      <img src="assets/logo3.png" alt="The Bible Outdoor Logo" />
+      <span>the Bible Outdoor</span>
+    </div>
+    
+    <button class="nav-toggle" aria-label="Open navigation">&#9776;</button>
+    <ul class="nav-links">
+      <li><a class="active" href="index.html">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="sermon.html">Sermon</a></li>
+      <li><a href="training.html">Training</a></li>
+      <li><a href="archives.html">Archives</a></li>
+      <li><a href="notifications.html">Notifications</a></li>
+      <li><a href="contacts.html">Contacts</a></li>
+      <li><a href="donation.html">Donation</a></li>
+      <li><a href="your-health.html" target="_blank">Your Health</a></li>
+      <li>
+        <button id="logout-btn" class="nav-logout" style="display: none;" aria-label="Logout">
+          <img src="assets/logout.png" alt="Logout" />
+        </button>
+      </li>
+    </ul>
+    <span id="welcome-name" style="color: var(--primary); margin-left: 1rem;"></span>
+    <button id="modeToggle" class="mode-toggle" aria-label="Toggle dark/light mode"></button>
+
+  </nav>
+  <!-- HERO -->
+  <header class="hero">
+
+
+    <!-- Example: Pastor's photo enlarged-on-click -->
+    <img src="assets/rev6.jpg" alt="Rev. Justine Ngewe" class="hero-img enlarge-on-click"/>
+    <div>
+      <h1>Rev. Justine Ngewe Mwakati</h1>
+      <h2>Pastor of New Covenant Gospel Church - the Lord's Table</h2>
+      <p>Welcome to the Bible Outdoor, where we bring the Word of God to open spaces and hearts.</p>
+    </div>
+    <button id="show-register-btn" style="background:var(--primary);color:white;padding:0.7em 2em;border:none;border-radius:1.2em;font-weight:bold;font-size:1.1em;cursor:pointer;margin:1.2em 0;">Join Us</button>
+    <form id="auth-form" class="join-form" autocomplete="off" style="display:none;position:relative;">
+      <button type="button" id="close-register-btn" style="position:absolute;top:0.7em;right:0.7em;background:var(--primary);color:white;width:2em;height:2em;padding:0;border:none;border-radius:50%;cursor:pointer;font-size:1.2em;box-shadow:0 1px 4px #0001;transition:background 0.2s;z-index:10;line-height:1;display:flex;align-items:center;justify-content:center;">&times;</button>
+      <h3 id="form-title">Join Our Community</h3>
+      <div id="join-fields">
+        <input type="text" id="join-name" name="name" placeholder="Name" required /> <!-- ✅ Added name -->
+      </div>
+      <input type="email" id="auth-email" name="email" placeholder="Gmail address" required />
+      <input type="password" id="auth-password" name="password" placeholder="Password" required style="width:calc(100% - 36px);display:inline-block;" />
+      <span id="toggleAuthPassword" style="position:relative;left:-32px;cursor:pointer;vertical-align:middle;" title="Show/Hide Password">👁️</span>
+      <div id="password-hint" style="font-size:0.97em;color:#888;margin-bottom:0.5em;margin-top:-0.5em;display:block;">
+        <span>Password must be at least 8 characters, include uppercase, lowercase, a number, and a special character.</span>
+      </div>
+      <div id="confirm-password-field">
+        <input type="password" id="confirm-password" name="confirmPassword" placeholder="Confirm Password" required style="width:calc(100% - 36px);display:inline-block;" />
+        <span id="toggleConfirmPassword" style="position:relative;left:-32px;cursor:pointer;vertical-align:middle;" title="Show/Hide Password">👁️</span>
+      </div>
+      <button type="submit" id="form-submit-btn">Join Us</button>
+      <div class="login-link" id="form-toggle-text">
+        Already a member? <a href="#" id="toggle-link">Login</a>
+      </div>
+      <div id="form-message" style="display:none;"></div>
+      <div id="forgot-password-link" style="text-align:right;margin-top:0.5em;display:block;">
+        <a href="#" style="color:var(--primary);font-size:0.98em;" id="forgot-password-btn">Forgot Password?</a>
+      </div>
+    </form>
+
+    <!-- Password Reset Modal -->
+    <div id="reset-modal" style="display:none;position:fixed;z-index:9999;left:0;top:0;width:100vw;height:100vh;background:rgba(0,0,0,0.7);backdrop-filter:blur(2px);align-items:center;justify-content:center;">
+      <div style="background:var(--white);padding:2em 2em 1.5em 2em;border-radius:1em;max-width:400px;width:90vw;box-shadow:0 4px 20px #0005;text-align:center;">
+        <h2 style="margin-top:0;color:var(--primary);">Reset Password</h2>
+        <form id="reset-form" style="margin-top:1em;display:flex;flex-direction:column;gap:1em;">
+          <input id="reset-email" type="email" required placeholder="Enter your email" style="padding:0.7em;border-radius:1em;border:1px solid var(--soft-gray);font-size:1.1em;" />
+          <button type="button" id="send-reset-code-btn" style="background:var(--primary);color:white;padding:0.6em 1.2em;border:none;border-radius:1em;font-weight:bold;cursor:pointer;">Send Code</button>
+          <input id="reset-code" type="text" maxlength="6" pattern="[0-9]{6}" required placeholder="6-digit code" style="padding:0.7em;border-radius:1em;border:1px solid var(--soft-gray);font-size:1.1em;text-align:center;letter-spacing:0.2em;display:none;" />
+          <button type="button" id="verify-reset-code-btn" style="background:var(--primary);color:white;padding:0.6em 1.2em;border:none;border-radius:1em;font-weight:bold;cursor:pointer;display:none;">Verify Code</button>
+          <input id="new-password" type="password" required placeholder="New password" style="padding:0.7em;border-radius:1em;border:1px solid var(--soft-gray);font-size:1.1em;display:none;" />
+          <button type="submit" id="reset-password-btn" style="background:var(--gold);color:var(--dark);padding:0.5em 1em;border:none;border-radius:1em;font-weight:bold;cursor:pointer;display:none;">Reset Password</button>
+          <div id="reset-msg" style="display:none;font-size:0.98em;"></div>
+        </form>
+        <button id="close-reset-modal" style="background:#ccc;color:#222;padding:0.5em 1em;border:none;border-radius:1em;cursor:pointer;margin-top:0.7em;">Cancel</button>
+      </div>
+    </div>
+    
+  </header>
+
+  <!-- MAIN HIGHLIGHTS -->
+  <main>
+    <section class="mission-belief">
+      <div>
+        <h3>Our Mission</h3>
+        <ul>
+          <li>Open-air worship & fellowship</li>
+          <li>Guided Bible study & outreach</li>
+          <li>Community support & charity</li>
+        </ul>
+      </div>
+      <div>
+        <h3>What We Believe</h3>
+        <ul>
+          <li>The Bible is the inspired Word of God</li>
+          <li>Salvation through faith in Jesus Christ</li>
+          <li>Living a life of love, service, and prayer</li>
+          <li>Unity of believers</li>
+          <li>Empowering the community spiritually and socially</li>
+        </ul>
+      </div>
+    </section>
+    <section class="carousel-section">
+      <h3>Recent Sermons & Events</h3>
+      <div class="carousel">
+        <button class="carousel-btn prev" aria-label="Previous">&#9664;</button>
+        <div class="carousel-track" id="carousel-track">
+        </div>
+        <button class="carousel-btn next" aria-label="Next">&#9654;</button>
+      </div>
+    </section>
+    <section class="service-testimonials">
+      <div>
+        <h3>Service Times</h3>
+        <ul>
+          <li>Sunday Service: 9:00 AM – 12:30 PM</li>
+          <li>Wednesday Bible Study: 6:00 PM – 7:30 PM</li>
+          <li>Friday Prayer Meeting: 6:00 PM – 7:00 PM</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Testimonials</h3>
+        <div id="testimony-list"></div>
+      </div>
+    </section>
+
+
+  </main>
+  
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-links">
+      <a href="index.html">Home</a> |
+      <a href="about.html">About</a> |
+      <a href="sermon.html">Sermon</a> |
+      <a href="training.html">Training</a> |
+      <a href="archives.html">Archives</a> |
+      <a href="notifications.html">Notifications</a> |
+      <a href="contacts.html">Contacts</a> |
+      <a href="donation.html">Donation</a>
+    </div>
+    <div class="footer-contact">
+      <div>Sigalagala along Kisumu-Kakamega Highway</div>
+      <div>📞 +254719321445 | ✉️ justinebiceptrainer@gmail.com</div>
+      <div>
+        <a href="https://www.tiktok.com/@nm_jus?_=ZM-8x3slnitC5t&_r=1" aria-label="Tiktok" target="_blank"><img src="assets/tiktok2.png" alt=""></a>
+        <a href="https://www.facebook.com/justine.mwakati" aria-label="Facebook" target="_blank"><img src="assets/facebook2.png" alt=""></a>
+        <a href="https://www.youtube.com/@justinenm" aria-label="Youtube" target="_blank"><img src="assets/youtube.png" alt=""></a>
+
+      </div>
+      <div>&copy; 2025 The Bible Outdoor. All Rights Reserved.</div>
+    </div>
+  </footer>
+  <!-- Lightbox Modal (put this just before your closing tag) -->
+  <div id="lightbox-modal" style="display:none;position:fixed;z-index:99999;left:0;top:0;width:100vw;height:100vh;background:rgba(0,0,0,0.86);align-items:center;justify-content:center;">
+    <span id="lightbox-close" style="position:absolute;top:2vw;right:3vw;font-size:2.5rem;color:#fff;cursor:pointer;font-weight:bold;">&times;</span>
+    <img id="lightbox-img" src="" alt="" style="max-width:92vw;max-height:92vh;border-radius:1.1rem;box-shadow:0 4px 32px #0009;display:block;" />
+  </div>
+  <div id="verify-modal" style="display:none;position:fixed;z-index:9999;left:0;top:0;width:100vw;height:100vh;background:rgba(0,0,0,0.7);backdrop-filter:blur(2px);align-items:center;justify-content:center;">
+    <div style="background:var(--white);padding:2em 2em 1.5em 2em;border-radius:1em;max-width:400px;width:90vw;box-shadow:0 4px 20px #0005;text-align:center;">
+      <h2 style="margin-top:0;color:var(--primary);">Verify Your Email</h2>
+      <p style="color:var(--primary);font-size:1.1em;">A verification code has been sent to your email.<br>Enter it below to activate your account.</p>
+      <form id="verify-form" style="margin-top:1em;display:flex;flex-direction:column;gap:1em;">
+        <input id="verify-code" type="text" maxlength="6" pattern="[0-9]{6}" required placeholder="6-digit code" style="padding:0.7em;border-radius:1em;border:1px solid var(--soft-gray);font-size:1.1em;text-align:center;letter-spacing:0.2em;" />
+        <button type="submit" style="background:var(--primary);color:white;padding:0.6em 1.2em;border:none;border-radius:1em;font-weight:bold;cursor:pointer;">Verify</button>
+        <button id="resend-code-btn" type="button" style="background:var(--gold);color:var(--dark);padding:0.5em 1em;border:none;border-radius:1em;font-weight:bold;cursor:pointer;">Resend Code <span id="resend-timer"></span></button>
+        <div id="verify-msg" style="display:none;font-size:0.98em;"></div>
+      </form>
+      <button id="close-verify-modal" style="background:#ccc;color:#222;padding:0.5em 1em;border:none;border-radius:1em;cursor:pointer;margin-top:0.7em;">Cancel</button>
+    </div>
+  </div>
+  <div id="reset-modal-2" style="display:none;position:fixed;z-index:9999;left:0;top:0;width:100vw;height:100vh;background:rgba(0,0,0,0.7);backdrop-filter:blur(2px);align-items:center;justify-content:center;">
+    <div style="background:var(--white);padding:2em 2em 1.5em 2em;border-radius:1em;max-width:400px;width:90vw;box-shadow:0 4px 20px #0005;text-align:center;">
+      <h2 style="margin-top:0;color:var(--primary);">Reset Password</h2>
+      <form id="reset-form-2" style="margin-top:1em;display:flex;flex-direction:column;gap:1em;">
+        <input id="reset-email-2" type="email" required placeholder="Enter your email" style="padding:0.7em;border-radius:1em;border:1px solid var(--soft-gray);font-size:1.1em;" />
+        <button type="button" id="send-reset-code-btn-2" style="background:var(--primary);color:white;padding:0.6em 1.2em;border:none;border-radius:1em;font-weight:bold;cursor:pointer;">Send Code</button>
+        <input id="reset-code-2" type="text" maxlength="6" pattern="[0-9]{6}" required placeholder="6-digit code" style="padding:0.7em;border-radius:1em;border:1px solid var(--soft-gray);font-size:1.1em;text-align:center;letter-spacing:0.2em;display:none;" />
+        <button type="button" id="verify-reset-code-btn-2" style="background:var(--primary);color:white;padding:0.6em 1.2em;border:none;border-radius:1em;font-weight:bold;cursor:pointer;display:none;">Verify Code</button>
+        <input id="new-password-2" type="password" required placeholder="New password" style="padding:0.7em;border-radius:1em;border:1px solid var(--soft-gray);font-size:1.1em;display:none;" />
+        <button type="submit" id="reset-password-btn-2" style="background:var(--gold);color:var(--dark);padding:0.5em 1em;border:none;border-radius:1em;font-weight:bold;cursor:pointer;display:none;">Reset Password</button>
+        <div id="reset-msg-2" style="display:none;font-size:0.98em;"></div>
+      </form>
+      <button id="close-reset-modal" style="background:#ccc;color:#222;padding:0.5em 1em;border:none;border-radius:1em;cursor:pointer;margin-top:0.7em;">Cancel</button>
+    </div>
+  </div>
+<!-- Replace your current <script> block for the join/login form with this one -->
+  <script src="scripts/auth.js"></script>
+  <script>
+    // Password visibility toggles for login/registration
+    const authPassword = document.getElementById('auth-password');
+    const toggleAuthPassword = document.getElementById('toggleAuthPassword');
+    if (authPassword && toggleAuthPassword) {
+      toggleAuthPassword.addEventListener('click', function() {
+        if (authPassword.type === 'password') {
+          authPassword.type = 'text';
+          toggleAuthPassword.textContent = '🙈';
+        } else {
+          authPassword.type = 'password';
+          toggleAuthPassword.textContent = '👁️';
+        }
+      });
+    }
+    const confirmPassword = document.getElementById('confirm-password');
+    const toggleConfirmPassword = document.getElementById('toggleConfirmPassword');
+    if (confirmPassword && toggleConfirmPassword) {
+      toggleConfirmPassword.addEventListener('click', function() {
+        if (confirmPassword.type === 'password') {
+          confirmPassword.type = 'text';
+          toggleConfirmPassword.textContent = '🙈';
+        } else {
+          confirmPassword.type = 'password';
+          toggleConfirmPassword.textContent = '👁️';
+        }
+      });
+    }
+  </script>
+  <script src="scripts/lightbox.js"></script>
+  <script src="scripts/media.js"></script>
+  <script src="scripts/carousel.js"></script>
+  <script src="js/main.js"></script>
+  <script src="scripts/testimony.js"></script>
+
+</body>
+</html>

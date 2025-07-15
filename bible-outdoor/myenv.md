@@ -1,0 +1,8 @@
+PORT=4000
+MONGO_URI=mongodb+srv://tbo:tbo2020@cluster0.mfwetxb.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+JWT_SECRET=this_is_the_bibleoutdoor_secret
+GMAIL_USER=thebibleoutdoor@gmail.com
+GMAIL_PASS=wiph pewa lzxm gbxc
+CLOUDINARY_CLOUD_NAME=dby5luwcf
+CLOUDINARY_API_KEY=313551696532564
+CLOUDINARY_API_SECRET=InfFiWGQB57HzMeWFtTTHfakAjM

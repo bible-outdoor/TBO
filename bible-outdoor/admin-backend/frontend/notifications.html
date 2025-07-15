@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Notifications – The Bible Outdoor</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="Upcoming church events at The Bible Outdoor." />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+
+</head>
+<body>
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <div class="nav-logo">
+      <img src="assets/logo3.png" alt="The Bible Outdoor Logo" />
+      <span>The Bible Outdoor</span>
+    </div>
+    <button class="nav-toggle" aria-label="Open navigation">&#9776;</button>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="sermon.html">Sermon</a></li>
+      <li><a href="training.html">Training</a></li>
+      <li><a href="archives.html">Archives</a></li>
+      <li><a class="active" href="notifications.html">Notifications</a></li>
+      <li><a href="contacts.html">Contacts</a></li>
+      <li><a href="donation.html">Donation</a></li>
+      <li><a href="your-health.html" target="_blank">Your Health</a></li>
+      <li>
+        <button id="logout-btn" class="nav-logout" style="display: none;" aria-label="Logout">
+          <img src="assets/logout.png" alt="Logout" />
+        </button>
+      </li>
+    </ul>
+    <span id="welcome-name" style="color: var(--primary); margin-left: 1rem;"></span>
+    <button id="modeToggle" class="mode-toggle" aria-label="Toggle dark/light mode"></button>
+  </nav>
+  <main>
+    <section class="hero" style="flex-direction:column;text-align:center;">
+      <h1>Upcoming Events</h1>
+      <p>Stay updated with the latest church events & activities.</p>
+    </section>
+    <section id="notifications-section">
+      <!-- Cards will be inserted here by JS -->
+    </section>
+    <section id="notification-detail" style="display:none; max-width:760px; margin:2em auto; background:var(--white); border-radius:1em; box-shadow:0 1px 12px #0002; padding:1.5em;">
+      <!-- Detail content inserted here -->
+    </section>
+    <div id="notification-modal" style="display:none;position:fixed;z-index:9999;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.7);backdrop-filter:blur(2px);align-items:center;justify-content:center;">
+      <div id="modal-content" style="background:var(--white);max-width:680px;width:90vw;padding:1.5em;border-radius:1em;box-shadow:0 2px 16px #0004;"></div>
+    </div>
+  </main>
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-links">
+      <a href="index.html">Home</a> |
+      <a href="about.html">About</a> |
+      <a href="sermon.html">Sermon</a> |
+      <a href="training.html">Training</a> |
+      <a href="archives.html">Archives</a> |
+      <a href="notifications.html">Notifications</a> |
+      <a href="contacts.html">Contacts</a> |
+      <a href="donation.html">Donation</a>
+    </div>
+    <div class="footer-contact">
+      <div>Sigalagala along Kisumu-Kakamega Highway</div>
+      <div>📞 +254719321445 | ✉️ justinebiceptrainer@gmail.com</div>
+      <div>
+        <a href="https://www.tiktok.com/@nm_jus?_=ZM-8x3slnitC5t&_r=1" aria-label="Tiktok" target="_blank"><img src="assets/tiktok2.png" alt=""></a>
+        <a href="https://www.facebook.com/justine.mwakati" aria-label="Facebook" target="_blank"><img src="assets/facebook2.png" alt=""></a>
+        <a href="https://www.youtube.com/@justinenm" aria-label="Youtube" target="_blank"><img src="assets/youtube.png" alt=""></a>
+
+      </div>      
+      <div>&copy; 2025 The Bible Outdoor. All Rights Reserved.</div>
+    </div>
+  </footer>
+
+  
+  <script src="js/main.js"></script>
+  <script>
+    // Fetch and render events from backend API
+    async function fetchEvents() {
+      try {
+        const res = await fetch('https://bible-outdoor-backend.onrender.com/api/events');
+        if (!res.ok) throw new Error('Failed to fetch events');
+        return await res.json();
+      } catch {
+        return [];
+      }
+    }
+
+    function renderNotifications(events) {
+      const container = document.getElementById("notifications-section");
+      container.innerHTML = "";
+      if (!events.length) {
+        container.innerHTML = `<div style="margin:2em auto;max-width:620px;text-align:center;color:var(--primary);font-size:1.1em;">No upcoming events at this time.</div>`;
+        return;
+      }
+      events.forEach((event) => {
+        const card = document.createElement("div");
+        card.style.cssText = `
+          display: flex;
+          align-items: center;
+          gap: 1em;
+          background: var(--white);
+          border-radius: 1em;
+          box-shadow: 0 1px 8px #0001;
+          padding: 1em;
+          margin: 1em auto;
+          max-width: 760px;
+          cursor: pointer;
+          transition: background 0.2s;
+        `;
+        card.innerHTML = `
+          <img src="${event.img || 'assets/event.png'}" alt="${event.host || ''}" style="width:70px;height:70px;border-radius:1em;object-fit:cover;">
+          <div>
+            <h3 style="margin:0;">${event.title || 'Untitled Event'}</h3>
+            <div style="color:var(--gold);font-weight:bold;">${event.host || ''}</div>
+            <div style="font-size:0.95em;color:gray;">${event.date ? event.date : ''}</div>
+            <p style="margin:0.4em 0 0 0;">${event.desc || ''}</p>
+          </div>
+        `;
+        card.addEventListener("click", () => showModal(event));
+        container.appendChild(card);
+      });
+    }
+
+    function showModal(event) {
+      const modal = document.getElementById("notification-modal");
+      const modalContent = document.getElementById("modal-content");
+      modalContent.innerHTML = `
+        <div style="display:flex;flex-wrap:wrap;align-items:center;gap:1.5em;">
+          <img src="${event.img || 'assets/event.png'}" alt="${event.host || ''}" style="width:140px;height:140px;border-radius:1em;object-fit:cover;box-shadow:0 2px 12px #0002;">
+          <div style="flex:1;min-width:200px;">
+            <h2 style="margin:0 0 0.5em 0; color: var(--primary);">${event.title || 'Untitled Event'}</h2>
+            <div style="font-weight:bold; color: var(--gold); font-size: 1.1em;">${event.host || ''}</div>
+            <div style="font-size:0.95em;color:gray;margin:0.4em 0;">${event.date ? event.date : ''}</div>
+            <p style="margin-top:0.5em; color: var(--dark);">${event.desc || ''}</p>
+          </div>
+        </div>
+        <button onclick="hideModal()" style="margin-top:1.5em;background:var(--primary);color:#fff;border:none;padding:0.6em 1.5em;border-radius:2em;cursor:pointer;">Close</button>
+      `;
+      modal.style.display = "flex";
+    }
+
+    window.hideModal = function() {
+      document.getElementById("notification-modal").style.display = "none";
+    };
+
+    // Initial render
+    fetchEvents().then(renderNotifications);
+
+    // Optionally, listen for a custom event to re-render on admin update
+    window.addEventListener('eventsUpdated', async function() {
+      const events = await fetchEvents();
+      renderNotifications(events);
+    });
+
+    document.getElementById("notification-modal").addEventListener("click", (e) => {
+      if (e.target.id === "notification-modal") hideModal();
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Training & Learning – The Bible Outdoor</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="Explore spiritual training, books, and learning resources from The Bible Outdoor." />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <div class="nav-logo">
+      <img src="assets/logo3.png" alt="The Bible Outdoor Logo" />
+      <span>The Bible Outdoor</span>
+    </div>
+    <button class="nav-toggle" aria-label="Open navigation">&#9776;</button>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="sermon.html">Sermon</a></li>
+      <li><a class="active" href="training.html">Training</a></li>
+      <li><a href="archives.html">Archives</a></li>
+      <li><a href="notifications.html">Notifications</a></li>
+      <li><a href="contacts.html">Contacts</a></li>
+      <li><a href="donation.html">Donation</a></li>
+      <li><a href="your-health.html" target="_blank">Your Health</a></li>
+      <li>
+        <button id="logout-btn" class="nav-logout" style="display: none;" aria-label="Logout">
+          <img src="assets/logout.png" alt="Logout" />
+        </button>
+      </li>
+    </ul>
+    <span id="welcome-name" style="color: var(--primary); margin-left: 1rem;"></span>
+    <button id="modeToggle" class="mode-toggle" aria-label="Toggle dark/light mode"></button>
+  </nav>
+
+  <!-- HERO -->
+  <header class="hero" style="flex-direction:column;text-align:center;">
+    <h1 style="margin-bottom:0.4em;color:var(--primary);font-size:2.3em;font-weight:800;letter-spacing:.5px;">
+      Training & Learning Library
+    </h1>
+    <h2 style="margin:0 0 0.7em 0;font-size:1.25em;color:var(--gold);font-weight:600;">
+      Spiritual Growth Resources & Study Materials
+    </h2>
+    <p style="font-size:1.13em;max-width:600px;margin:0 auto 0.7em auto;color:var(--text-alt);">
+      Explore our curated collection of books, study guides, videos, audios, and downloadable resources to deepen your faith and understanding of the Word.
+    </p>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <main style="padding: 2rem 1rem; max-width: 1000px; margin: auto;">
+    <div style="max-width:1050px;margin:2em auto 0 auto;padding:0 1em;">
+        <label for="filter-select" style="font-weight:bold;color:var(--primary);margin-right:0.5em;">Filter by:</label>
+        <select id="filter-select" style="padding:0.5em 1em;border-radius:1em;border:1px solid var(--sky);background:var(--sky);color:black;">
+            <option value="all">All</option>
+            <option value="pdf">PDFs</option>
+            <option value="video">Videos</option>
+            <option value="audio">Audios</option>
+        </select>
+    </div>
+
+    <section id="library-section">
+      <h2 style="color: var(--primary); text-align: center;">Available Resources</h2>
+      <p style="text-align: center; margin-bottom: 1.5rem; color: gray;">Explore downloadable PDFs, articles, and study materials.</p>
+      
+      <div class="media-grid" id="training-library">
+        <!-- JS will populate this grid -->
+      </div>
+    </section>
+  </main>
+  <div id="training-lightbox" class="modal-bg" style="display:none;">
+    <div class="modal" style="max-width:90vw;width:100%;position:relative;">
+        <button onclick="closeTrainingModal()" class="close-modal">&times;</button>
+        <div id="training-lightbox-content" style="text-align:center;"></div>
+    </div>
+    </div>
+
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-links">
+      <a href="index.html">Home</a> |
+      <a href="about.html">About</a> |
+      <a href="sermon.html">Sermon</a> |
+      <a href="training.html">Training</a> |
+      <a href="archives.html">Archives</a> |
+      <a href="notifications.html">Notifications</a> |
+      <a href="contacts.html">Contacts</a> |
+      <a href="donation.html">Donation</a>
+    </div>
+    <div class="footer-contact">
+      <div>Sigalagala along Kisumu-Kakamega Highway</div>
+      <div>📞 +254719321445 | ✉️ justinebiceptrainer@gmail.com</div>
+      <div>
+        <a href="https://www.tiktok.com/@nm_jus?_=ZM-8x3slnitC5t&_r=1" aria-label="Tiktok" target="_blank"><img src="assets/tiktok2.png" alt=""></a>
+        <a href="https://www.facebook.com/justine.mwakati" aria-label="Facebook" target="_blank"><img src="assets/facebook2.png" alt=""></a>
+        <a href="https://www.youtube.com/@justinenm" aria-label="Youtube" target="_blank"><img src="assets/youtube.png" alt=""></a>
+
+      </div>
+      <div>&copy; 2025 The Bible Outdoor. All Rights Reserved.</div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+
+  <script src="scripts/training.js"></script>
+
+</body>
+</html>
