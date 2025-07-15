@@ -9,7 +9,7 @@ let ORDER_WHATSAPP = "";
 
 async function fetchOrderContacts() {
   try {
-    const res = await fetch('https://bible-outdoor-backend.onrender.com/api/settings/site');
+    const res = await fetch('https://tbo-c5wk.onrender.com/api/settings/site');
     if (!res.ok) throw new Error('Failed to fetch site settings');
     const data = await res.json();
     ORDER_EMAIL = data.email || "";
@@ -50,7 +50,7 @@ let prodSort = 'date-desc', prodPage = 1, prodView = [], allProducts = [];
 
 async function fetchProducts() {
   try {
-    const res = await fetch('https://bible-outdoor-backend.onrender.com/api/products');
+    const res = await fetch('https://tbo-c5wk.onrender.com/api/products');
     if (!res.ok) throw new Error('Failed to fetch products');
     return await res.json();
   } catch (e) {
