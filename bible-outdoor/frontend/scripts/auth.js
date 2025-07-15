@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", function () {
   let isLogin = false;
 
   // Set your backend API base URL here
-  const API_BASE = "https://bible-outdoor-backend.onrender.com";
+  const API_BASE = "https://tbo-c5wk.onrender.com";
 
   // If URL contains #login, force login mode
   if (window.location.hash === "#login") {
