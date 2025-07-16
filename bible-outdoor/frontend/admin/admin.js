@@ -669,7 +669,7 @@ async function showVerseForm(id) {
   const overlay = document.createElement('div');
   overlay.className = 'form-overlay';
 
-  const formModal = document.createElement('div');
+  formModal = document.createElement('div');
   formModal.className = 'form-modal';
 
   formModal.innerHTML = `
@@ -982,7 +982,7 @@ async function showLibraryForm(id) {
   const overlay = document.createElement('div');
   overlay.className = 'form-overlay';
 
-  const formModal = document.createElement('div');
+  formModal = document.createElement('div');
   formModal.className = 'form-modal';
 
   formModal.innerHTML = `
@@ -1169,7 +1169,7 @@ async function showMediaForm(id) {
   const overlay = document.createElement('div');
   overlay.className = 'form-overlay';
 
-  const formModal = document.createElement('div');
+  formModal = document.createElement('div');
   formModal.className = 'form-modal';
 
   formModal.innerHTML = `
@@ -1410,7 +1410,7 @@ async function showEventForm(id) {
   const overlay = document.createElement('div');
   overlay.className = 'form-overlay';
 
-  const formModal = document.createElement('div');
+  formModal = document.createElement('div');
   formModal.className = 'form-modal';
 
   formModal.innerHTML = `
@@ -2117,7 +2117,7 @@ async function showProductForm(id) {
   const overlay = document.createElement('div');
   overlay.className = 'form-overlay';
 
-  const formModal = document.createElement('div');
+  formModal = document.createElement('div');
   formModal.className = 'form-modal';
 
   formModal.innerHTML = `
@@ -2377,7 +2377,7 @@ async function showUserForm(email) {
 
   const overlay = document.createElement('div');
   overlay.className = 'form-overlay';
-  const formModal = document.createElement('div');
+  formModal = document.createElement('div');
   formModal.className = 'form-modal';
   formModal.innerHTML = `
     <button class="close-btn" onclick="closeForm()">×</button>
@@ -2946,6 +2946,7 @@ async function fetchActivityLog() {
 // --- Add Cropper.js cropping for product image upload ---
 let cropperInstance = null;
 let cropperModal = null;
+let formModal = null;
 
 function showCropperModal(file, onCrop) {
   if (cropperModal) cropperModal.remove();
