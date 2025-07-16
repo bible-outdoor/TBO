@@ -35,7 +35,7 @@ const allowedOrigins = [
   'https://bespoke-caramel-a297a0.netlify.app', // Netlify production
   'https://bibleoutdoor.netlify.app', // Netlify production (added for CORS)
   'https://yourdomain.com', // TODO: Replace with your production domain
-  'https://www.yourdomain.com' // TODO: Replace with your production domain
+  'https://687767aeb25587993eb5382c--bibleoutdoor.netlify.app' // TODO: Replace with your production domain
 ];
 app.use(cors({
   origin: function(origin, callback) {
