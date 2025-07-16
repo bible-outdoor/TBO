@@ -168,22 +168,22 @@ body {
   top: 0;
   z-index: 100;
   background: linear-gradient(135deg, var(--bg-alt) 80%, var(--surface) 100%);
-  font-size: 1.4em;
+  font-size: 1.08em;
   font-weight: bold;
   color: var(--primary);
   letter-spacing: .5px;
-  padding: 0 0 1em 0;
+  padding: 0.5em 0 0.5em 0;
   margin-top: 0;
-  border-bottom: 1.5px solid #e2e6ea;
+  border-bottom: 1px solid #e2e6ea;
   box-shadow: 0 2px 6px -4px rgba(2,136,209,0.13);
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 0.7em;
+  justify-content: flex-start;
+  gap: 0.35em;
 }
 .sidebar-brand span{
-  margin-right: 20px;
-
+  margin-right: 0.5em;
+  font-size: 1em;
 }
 .admin-sidebar nav {
   flex: 1 1 auto;
@@ -228,9 +228,9 @@ body {
 .mode-toggle {
   background: var(--primary); color: #fff;
   border: none; border-radius: 50%;
-  width: 36px; height: 36px;
-  font-size: 1.2rem; cursor: pointer;
-  margin: 1em auto 0.6em auto; box-shadow: var(--shadow);
+  width: 28px; height: 28px;
+  font-size: 1em; cursor: pointer;
+  margin: 0 0.5em 0 0; box-shadow: var(--shadow);
   display: flex; align-items: center; justify-content: center;
   transition: background 0.18s;
 }
