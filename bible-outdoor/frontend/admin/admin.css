@@ -168,22 +168,60 @@ body {
   top: 0;
   z-index: 100;
   background: linear-gradient(135deg, var(--bg-alt) 80%, var(--surface) 100%);
-  font-size: 1.4em;
+  font-size: 1.08em;
   font-weight: bold;
   color: var(--primary);
   letter-spacing: .5px;
-  padding: 0 0 1em 0;
+  padding: 0.5em 0.5em 0.5em 0.5em;
   margin-top: 0;
   border-bottom: 1.5px solid #e2e6ea;
   box-shadow: 0 2px 6px -4px rgba(2,136,209,0.13);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 0.7em;
+  gap: 0.3em;
+  min-width: 0;
 }
-.sidebar-brand span{
-  margin-right: 20px;
-
+.logout-icon-btn {
+  font-size: 1.15em !important;
+  padding: 0 0.2em 0 0 !important;
+  min-width: 32px;
+  min-height: 32px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.mode-toggle {
+  width: 32px;
+  height: 32px;
+  font-size: 1.1em;
+  margin: 0 0 0 0.2em;
+}
+.sidebar-brand span[style*="flex:1"] {
+  font-size: 1em;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+@media (max-width: 600px) {
+  .sidebar-brand {
+    font-size: 0.98em;
+    padding: 0.3em 0.2em 0.3em 0.2em;
+    gap: 0.1em;
+  }
+  .logout-icon-btn, .mode-toggle {
+    width: 28px;
+    height: 28px;
+    font-size: 1em;
+    min-width: 28px;
+    min-height: 28px;
+  }
+  .sidebar-brand span[style*="flex:1"] {
+    font-size: 0.95em;
+  }
 }
 .admin-sidebar nav {
   flex: 1 1 auto;
