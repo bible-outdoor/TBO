@@ -60,7 +60,7 @@ async function fetchProducts() {
 
 function renderProducts() {
   prodView = allProducts.slice();
-  if (prodSort === 'date-desc') prodView.sort((a, b) => b.date.localeCompare(a.date));
+  if (prodSort === 'date-desc') prodView.sort((a, b) => new Date(b.date) - new Date(a.date));
   else if (prodSort === 'price-low') prodView.sort((a, b) => a.price - b.price);
   else if (prodSort === 'price-high') prodView.sort((a, b) => b.price - a.price);
 

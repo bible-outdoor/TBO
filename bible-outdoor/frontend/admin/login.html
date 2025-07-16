@@ -17,8 +17,10 @@
       <form class="admin-login-form" id="adminLoginForm" autocomplete="off">
         <h2 id="formTitle">Admin Login</h2>
         <input type="email" id="adminEmail" placeholder="Gmail address" required>
-        <input type="password" id="adminPass" placeholder="Password" required style="width:calc(100% - 36px);display:inline-block;">
-        <span id="toggleAdminPass" style="position:relative;left:-32px;cursor:pointer;vertical-align:middle;" title="Show/Hide Password">👁️</span>
+        <div class="input-icon-wrap">
+          <input type="password" id="adminPass" placeholder="Password" required>
+          <span id="toggleAdminPass" title="Show/Hide Password">👁️</span>
+        </div>
         <button type="submit" id="formBtn">Login</button>
         <div class="admin-login-msg" id="adminLoginMsg"></div>
         <div class="default-info"></div>

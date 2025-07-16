@@ -2054,8 +2054,8 @@ async function renderProducts() {
   let page = window.prodPage || 1;
   const pageSize = 9;
   let arr = [...products];
-  if (sort === 'date-asc') arr.sort((a, b) => a.date.localeCompare(b.date));
-  if (sort === 'date-desc') arr.sort((a, b) => b.date.localeCompare(a.date));
+  if (sort === 'date-asc') arr.sort((a, b) => new Date(a.date) - new Date(b.date));
+  if (sort === 'date-desc') arr.sort((a, b) => new Date(b.date) - new Date(a.date));
   if (sort === 'price-asc') arr.sort((a, b) => a.price - b.price);
   if (sort === 'price-desc') arr.sort((a, b) => b.price - a.price);
   const totalPages = Math.ceil(arr.length / pageSize);
