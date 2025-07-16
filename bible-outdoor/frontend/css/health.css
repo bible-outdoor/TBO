@@ -156,7 +156,7 @@
       gap: 1.3em;
     }
     @media (max-width: 950px) { .products-grid { grid-template-columns: repeat(2,1fr);} }
-    @media (max-width: 600px) { .products-grid { grid-template-columns: 1fr;} }
+    @media (max-width: 600px) { .products-grid { grid-template-columns: repeat(3, 1fr); } }
     .product-thumb {
       background: var(--sky);
       border-radius: 1.2em;
