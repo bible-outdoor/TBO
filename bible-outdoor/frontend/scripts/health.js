@@ -47,6 +47,7 @@ function setupContactButtons() {
 // --- PRODUCTS: Fetch from backend API ---
 const perPage = 12;
 let prodSort = 'date-desc', prodPage = 1, prodView = [], allProducts = [];
+let productSearchTerm = '';
 
 async function fetchProducts() {
   try {
@@ -60,6 +61,14 @@ async function fetchProducts() {
 
 function renderProducts() {
   prodView = allProducts.slice();
+  // Filter by search term
+  if (productSearchTerm.trim()) {
+    const term = productSearchTerm.trim().toLowerCase();
+    prodView = prodView.filter(prod =>
+      (prod.name && prod.name.toLowerCase().includes(term)) ||
+      (prod.desc && prod.desc.toLowerCase().includes(term))
+    );
+  }
   if (prodSort === 'date-desc') prodView.sort((a, b) => new Date(b.date) - new Date(a.date));
   else if (prodSort === 'price-low') prodView.sort((a, b) => a.price - b.price);
   else if (prodSort === 'price-high') prodView.sort((a, b) => b.price - a.price);
@@ -142,6 +151,15 @@ window.onload = async function () {
     img: prod.imageUrl || "" // Map imageUrl to img for compatibility
   }));
   renderProducts();
+  // Add search event
+  const searchInput = document.getElementById('product-search');
+  if (searchInput) {
+    searchInput.addEventListener('input', function() {
+      productSearchTerm = this.value;
+      prodPage = 1;
+      renderProducts();
+    });
+  }
 };
 window.prodPrev = prodPrev;
 window.prodNext = prodNext;
