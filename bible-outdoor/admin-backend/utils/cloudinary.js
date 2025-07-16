@@ -7,10 +7,6 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-console.log('Cloudinary config in use:', {
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY
-});
 
 // Upload media from buffer, preserving extension for raw files
 exports.uploadMediaFromBuffer = (fileBuffer, resourceType = 'auto', folder = 'media', originalname = '') => {

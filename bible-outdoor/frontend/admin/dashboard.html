@@ -35,30 +35,29 @@
         <button class="mode-toggle" id="modeToggle" title="Toggle dark/light mode"></button>
         <span>👤 Admin</span>
       </div>
-      <nav>
-        <ul>
-          <li><a href="#overview" class="nav-link active">Dashboard</a></li>
-          <li><a href="#sermons" class="nav-link">Sermon Manager</a></li>
-          <li><a href="#sunday" class="nav-link">Sunday Service</a></li>
-          <li><a href="#training" class="nav-link">Library</a></li>
-          <li><a href="#media" class="nav-link">Media Archive</a></li>
-          <li><a href="#events" class="nav-link">Event Manager</a></li>
-          <li><a href="#contacts" class="nav-link">Contacts</a></li>
-          <!-- Testimonies link will be injected by admin.js for superadmin/supereditor only -->
-          <li><a href="#donation" class="nav-link">Donation Settings</a></li>
-          <li><a href="#products" class="nav-link">Product Manager</a></li>
-          <li><a href="#users" class="nav-link">User Manager</a></li>
-          <li><a href="#settings" class="nav-link">Site Settings</a></li>
-
-        </ul>
-      </nav>
+      <div class="sidebar-nav-scroll">
+        <nav>
+          <ul>
+            <li><a href="#overview" class="nav-link active">Dashboard</a></li>
+            <li><a href="#sermons" class="nav-link">Sermon Manager</a></li>
+            <li><a href="#sunday" class="nav-link">Sunday Service</a></li>
+            <li><a href="#training" class="nav-link">Library</a></li>
+            <li><a href="#media" class="nav-link">Media Archive</a></li>
+            <li><a href="#events" class="nav-link">Event Manager</a></li>
+            <li><a href="#contacts" class="nav-link">Contacts</a></li>
+            <!-- Testimonies link will be injected by admin.js for superadmin/supereditor only -->
+            <li><a href="#donation" class="nav-link">Donation Settings</a></li>
+            <li><a href="#products" class="nav-link">Product Manager</a></li>
+            <li><a href="#users" class="nav-link">User Manager</a></li>
+            <li><a href="#settings" class="nav-link">Site Settings</a></li>
+          </ul>
+        </nav>
+      </div>
       <button class="sidebar-toggle" id="sidebarToggle">☰</button>
       <div class="admin-user-info" id="adminUserInfo">
         <span id="adminNameLabel"></span>
         <span id="adminRoleLabel"></span>
       </div>
-      
-      
       <button class="logout-btn" onclick="logoutAdmin()">Logout</button>
     </aside>
     <!-- Only one backdrop, right after the sidebar -->
