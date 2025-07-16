@@ -2050,11 +2050,12 @@ async function renderProducts() {
     return;
   }
   const products = await fetchProducts();
-  let sort = window.prodSort || 'date-asc';
+  let sort = window.prodSort || 'date-desc';
   let page = window.prodPage || 1;
   const pageSize = 9;
   let arr = [...products];
   if (sort === 'date-asc') arr.sort((a, b) => a.date.localeCompare(b.date));
+  if (sort === 'date-desc') arr.sort((a, b) => b.date.localeCompare(a.date));
   if (sort === 'price-asc') arr.sort((a, b) => a.price - b.price);
   if (sort === 'price-desc') arr.sort((a, b) => b.price - a.price);
   const totalPages = Math.ceil(arr.length / pageSize);
@@ -2066,6 +2067,7 @@ async function renderProducts() {
       <span style="margin-left:1.5em;">
         Sort:
         <select id="prodSort" onchange="window.prodSort=this.value; window.prodPage=1; renderProducts()">
+          <option value="date-desc"${sort === 'date-desc' ? ' selected' : ''}>Newest</option>
           <option value="date-asc"${sort === 'date-asc' ? ' selected' : ''}>Oldest</option>
           <option value="price-asc"${sort === 'price-asc' ? ' selected' : ''}>Price Low→High</option>
           <option value="price-desc"${sort === 'price-desc' ? ' selected' : ''}>Price High→Low</option>
