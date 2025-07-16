@@ -131,7 +131,7 @@
           const member = JSON.parse(localStorage.getItem("tbo_member"));
           if (member && message) {
             // Send to backend
-            fetch('https://bible-outdoor-backend.onrender.com/api/contacts', {
+            fetch('https://tbo-c5wk.onrender.com/api/contacts', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({

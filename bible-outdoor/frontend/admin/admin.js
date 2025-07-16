@@ -12,14 +12,14 @@ function getAdminSession() {
 
 // --- User Data Access Abstraction (Backend API) ---
 async function fetchUsers() {
-  const res = await fetch('https://bible-outdoor-backend.onrender.com/api/users', {
+  const res = await fetch('https://tbo-c5wk.onrender.com/api/users', {
     headers: { Authorization: 'Bearer ' + getAdminToken() }
   });
   if (!res.ok) throw new Error('Failed to fetch users');
   return await res.json();
 }
 async function addUser(user) {
-  const res = await fetch('https://bible-outdoor-backend.onrender.com/api/users', {
+  const res = await fetch('https://tbo-c5wk.onrender.com/api/users', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -31,7 +31,7 @@ async function addUser(user) {
   return await res.json();
 }
 async function updateUser(email, user) {
-  const res = await fetch(`https://bible-outdoor-backend.onrender.com/api/users/${encodeURIComponent(email)}`, {
+  const res = await fetch(`https://tbo-c5wk.onrender.com/api/users/${encodeURIComponent(email)}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
@@ -43,7 +43,7 @@ async function updateUser(email, user) {
   return await res.json();
 }
 async function deleteUserByEmail(email) {
-  const res = await fetch(`https://bible-outdoor-backend.onrender.com/api/users/${encodeURIComponent(email)}`, {
+  const res = await fetch(`https://tbo-c5wk.onrender.com/api/users/${encodeURIComponent(email)}`, {
     method: 'DELETE',
     headers: { Authorization: 'Bearer ' + getAdminToken() }
   });
@@ -122,7 +122,7 @@ async function renderActivityLog() {
 // --- Log Activity Utility ---
 async function logActivity(action, details = '') {
   const session = getAdminSession && getAdminSession();
-  await fetch('https://bible-outdoor-backend.onrender.com/api/activitylog', {
+  await fetch('https://tbo-c5wk.onrender.com/api/activitylog', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -146,7 +146,7 @@ async function clearActivityLog() {
       okText: "Clear All",
       cancelText: "Cancel",
       onOk: async function () {
-        await fetch('https://bible-outdoor-backend.onrender.com/api/activitylog/clear', {
+        await fetch('https://tbo-c5wk.onrender.com/api/activitylog/clear', {
           method: 'POST',
           headers: { Authorization: 'Bearer ' + getAdminToken() }
         });
@@ -231,7 +231,7 @@ function showNotification(message, duration = 3000) {
 
 // --- 5. Authentication Logic (Backend) ---
 async function authenticateUser(email, password) {
-  const res = await fetch('https://bible-outdoor-backend.onrender.com/api/auth/login', {
+  const res = await fetch('https://tbo-c5wk.onrender.com/api/auth/login', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ email, pass: password })
@@ -264,11 +264,11 @@ document.addEventListener("DOMContentLoaded", function () {
       if (token) {
         // Onboarding login (invitation)
         payload = { email, password, token };
-        loginUrl = 'https://bible-outdoor-backend.onrender.com/api/users/admin/login';
+        loginUrl = 'https://tbo-c5wk.onrender.com/api/users/admin/login';
       } else {
         // Normal login
         payload = { email, pass: password };
-        loginUrl = 'https://bible-outdoor-backend.onrender.com/api/auth/login';
+        loginUrl = 'https://tbo-c5wk.onrender.com/api/auth/login';
       }
 
       try {
@@ -370,7 +370,7 @@ document.addEventListener("DOMContentLoaded", function() {
       document.getElementById('formBtn').disabled = true;
       try {
         // --- Use backend API for authentication ---
-        const res = await fetch('https://bible-outdoor-backend.onrender.com/api/auth/login', {
+        const res = await fetch('https://tbo-c5wk.onrender.com/api/auth/login', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email, pass })
@@ -573,7 +573,7 @@ async function saveSermonVerses(verses) {
 
 // --- Sermon Data Access Abstraction (Backend API) ---
 async function fetchSermonVerses() {
-  const res = await fetch('https://bible-outdoor-backend.onrender.com/api/sermons', {
+  const res = await fetch('https://tbo-c5wk.onrender.com/api/sermons', {
     headers: { Authorization: 'Bearer ' + getAdminToken() }
   });
   if (!res.ok) throw new Error('Failed to fetch sermons');
@@ -585,7 +585,7 @@ async function saveSermonVerses(verses) {
 
 // Add a new sermon
 async function addSermon(sermon) {
-  const res = await fetch('https://bible-outdoor-backend.onrender.com/api/sermons', {
+  const res = await fetch('https://tbo-c5wk.onrender.com/api/sermons', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -599,7 +599,7 @@ async function addSermon(sermon) {
 
 // Update a sermon by ID
 async function updateSermon(id, sermon) {
-  const res = await fetch(`https://bible-outdoor-backend.onrender.com/api/sermons/${id}`, {
+  const res = await fetch(`https://tbo-c5wk.onrender.com/api/sermons/${id}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
@@ -613,7 +613,7 @@ async function updateSermon(id, sermon) {
 
 // Delete a sermon by ID
 async function deleteSermonById(id) {
-  const res = await fetch(`https://bible-outdoor-backend.onrender.com/api/sermons/${id}`, {
+  const res = await fetch(`https://tbo-c5wk.onrender.com/api/sermons/${id}`, {
     method: 'DELETE',
     headers: { Authorization: 'Bearer ' + getAdminToken() }
   });
@@ -754,14 +754,14 @@ async function deleteSermon(id) {
 
 // 3. Sunday Service Control (Backend API)
 async function fetchSundayService() {
-  const res = await fetch('https://bible-outdoor-backend.onrender.com/api/settings/sunday', {
+  const res = await fetch('https://tbo-c5wk.onrender.com/api/settings/sunday', {
     headers: { Authorization: 'Bearer ' + getAdminToken() }
   });
   if (!res.ok) throw new Error('Failed to fetch Sunday Service settings');
   return await res.json();
 }
 async function saveSundayService(data) {
-  const res = await fetch('https://bible-outdoor-backend.onrender.com/api/settings/sunday', {
+  const res = await fetch('https://tbo-c5wk.onrender.com/api/settings/sunday', {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
@@ -803,7 +803,7 @@ async function renderSunday() {
 
 // --- Library Data Access Abstraction (Backend API) ---
 async function fetchLibraryItems() {
-  const res = await fetch('https://bible-outdoor-backend.onrender.com/api/library', {
+  const res = await fetch('https://tbo-c5wk.onrender.com/api/library', {
     headers: { Authorization: 'Bearer ' + getAdminToken() }
   });
   if (!res.ok) throw new Error('Failed to fetch library items');
@@ -821,7 +821,7 @@ async function addLibraryItem(item, file, cover) {
   if (file) formData.append('file', file);
   if (cover) formData.append('cover', cover);
 
-  const res = await fetch('https://bible-outdoor-backend.onrender.com/api/library/upload', {
+  const res = await fetch('https://tbo-c5wk.onrender.com/api/library/upload', {
     method: 'POST',
     headers: { Authorization: 'Bearer ' + getAdminToken() },
     body: formData
@@ -840,7 +840,7 @@ async function updateLibraryItem(id, item, file, cover) {
   if (file) formData.append('file', file);
   if (cover) formData.append('cover', cover);
 
-  const res = await fetch(`https://bible-outdoor-backend.onrender.com/api/library/${id}`, {
+  const res = await fetch(`https://tbo-c5wk.onrender.com/api/library/${id}`, {
     method: 'PUT',
     headers: { Authorization: 'Bearer ' + getAdminToken() },
     body: formData
@@ -851,7 +851,7 @@ async function updateLibraryItem(id, item, file, cover) {
 // ...existing code...
 
 async function deleteLibraryItemById(id) {
-  const res = await fetch(`https://bible-outdoor-backend.onrender.com/api/library/${id}`, {
+  const res = await fetch(`https://tbo-c5wk.onrender.com/api/library/${id}`, {
     method: 'DELETE',
     headers: { Authorization: 'Bearer ' + getAdminToken() }
   });
@@ -1078,7 +1078,7 @@ async function fetchMediaArchive() {
   }
   // Debug: Log token and headers
   console.log("fetchMediaArchive: Using token:", token);
-  const res = await fetch('https://bible-outdoor-backend.onrender.com/api/media', {
+  const res = await fetch('https://tbo-c5wk.onrender.com/api/media', {
     headers: { Authorization: 'Bearer ' + token }
   });
   if (!res.ok) {
