@@ -244,12 +244,6 @@ async function authenticateUser(email, password) {
 
 // --- Invitation token login logic ---
 document.addEventListener("DOMContentLoaded", function() {
-  // --- Redirect to login when user leaves the page ---
-  window.addEventListener('beforeunload', function(e) {
-    // Clear session and redirect to login
-    clearAdminSession();
-    window.location.href = "login.html";
-  });
   // ...existing code...
 });
 document.addEventListener("DOMContentLoaded", function () {
