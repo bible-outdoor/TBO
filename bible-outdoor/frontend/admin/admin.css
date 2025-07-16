@@ -286,34 +286,15 @@ body {
   box-shadow: 0 6px 18px -4px #c0392b;
 }
 
-/* Sidebar layout: make logout button fixed at the bottom */
 .admin-sidebar {
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: 95vh;
   align-items: stretch;
-  position: relative;
 }
 .logout-btn {
-  position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  width: 100%;
-  margin: 0;
-  border-radius: 0;
-  z-index: 1001;
-  /* Ensure it appears above the sidebar backdrop */
-}
-@media (min-width: 801px) {
-  .logout-btn {
-    left: unset;
-    right: unset;
-    width: calc(100% - 2em);
-    margin: 1.5em 1em 0 1em;
-    border-radius: 8px;
-    position: static;
-  }
+  margin-top: auto;
+  margin-bottom: 1.5em;
 }
 .admin-main {
   flex: 1 1 auto;
