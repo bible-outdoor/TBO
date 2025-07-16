@@ -29,7 +29,7 @@ const app = express();
 const allowedOrigins = [
   
   'http://localhost:3000', // Dev
-  'https://bible-outdoor-backend.onrender.com', // Production
+  'https://tbo-c5wk.onrender.com', // Production
   'http://127.0.0.1:3000', // Dev (added for completeness)
   'http://127.0.0.1:4000', // Dev (added for completeness)
   'http://127.0.0.1:5500', // Dev (your current frontend)

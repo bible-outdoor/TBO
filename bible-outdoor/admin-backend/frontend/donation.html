@@ -90,7 +90,7 @@
   // Fetch and render donation settings from backend API
   async function fetchDonationSettings() {
     try {
-      const res = await fetch('https://bible-outdoor-backend.onrender.com/api/settings/donation');
+      const res = await fetch('https://tbo-c5wk.onrender.com/api/settings/donation');
       if (!res.ok) throw new Error('Failed to fetch donation settings');
       return await res.json();
     } catch {

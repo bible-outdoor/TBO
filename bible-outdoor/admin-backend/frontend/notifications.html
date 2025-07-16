@@ -82,7 +82,7 @@
     // Fetch and render events from backend API
     async function fetchEvents() {
       try {
-        const res = await fetch('https://bible-outdoor-backend.onrender.com/api/events');
+        const res = await fetch('https://tbo-c5wk.onrender.com/api/events');
         if (!res.ok) throw new Error('Failed to fetch events');
         return await res.json();
       } catch {
