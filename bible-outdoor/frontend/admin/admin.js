@@ -301,9 +301,8 @@ document.addEventListener("DOMContentLoaded", function () {
 function setAdminSession(token, user) {
   // Store only the token for backend auth
   localStorage.setItem('adminToken', token);
+  // Optionally, store user info for UI display
   localStorage.setItem('adminUser', JSON.stringify(user));
-  // Set last activity timestamp
-  localStorage.setItem('adminLastActive', Date.now().toString());
   // Show logout button immediately
   const logoutBtn = document.querySelector('.logout-btn');
   if (logoutBtn) logoutBtn.style.display = 'block';
@@ -319,21 +318,6 @@ function getAdminUser() {
 function clearAdminSession() {
   localStorage.removeItem('adminToken');
   localStorage.removeItem('adminUser');
-  localStorage.removeItem('adminLastActive');
-  // --- Session Timeout Check ---
-  const token = getAdminToken();
-  const lastActive = localStorage.getItem('adminLastActive');
-  if (token && lastActive) {
-    const now = Date.now();
-    const inactiveMinutes = (now - parseInt(lastActive, 10)) / (1000 * 60);
-    if (inactiveMinutes > 20) {
-      clearAdminSession();
-      window.location.href = "login.html";
-      return;
-    }
-    // Update last active timestamp on page load
-    localStorage.setItem('adminLastActive', now.toString());
-  }
 }
 
 // --- 7. Require Auth for Protected Pages ---
