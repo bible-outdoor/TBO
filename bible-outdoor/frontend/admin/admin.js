@@ -69,7 +69,7 @@ function isSuperAdminOrSuperEditor() {
 async function renderActivityLog() {
   if (!isSuperAdmin()) {
     adminMain.innerHTML = `<div class="section-title">Activity Log</div>
-      <p style="color: #c0392b; font-size: 1.15em;">Not authorized. Only Super Admin can access this section.</p>`;
+      <p style="color: #c0392b; font-size: 1.15em;">Not authorized.</p>`;
     return;
   }
   let logs = [];
