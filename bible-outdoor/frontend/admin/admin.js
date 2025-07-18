@@ -1441,7 +1441,7 @@ async function showEventForm(id) {
       host: f.host.value,
       desc: f.desc.value
     };
-    const file = f.img.files[0];
+    const file = f.image.files[0];
 
     if (id) {
       updateEvent(id, item, file).then(() => {
