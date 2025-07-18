@@ -29,7 +29,7 @@ router.get('/', async (req, res) => {
 
 // Add event (superadmin or supereditor)
 router.post('/', auth, upload.single('image'), async (req, res) => {
-  if (!['superadmin', 'supereditor'].includes(req.user.role)) return res.status(403).json({ message: 'Forbidden' });
+  if (!['superadmin', 'supereditor', 'editor'].includes(req.user.role)) return res.status(403).json({ message: 'Forbidden' });
   try {
     let imageUrl = '', imagePublicId = '';
     if (req.file) {
@@ -47,7 +47,7 @@ router.post('/', auth, upload.single('image'), async (req, res) => {
 
 // Edit event (superadmin or supereditor)
 router.put('/:id', auth, upload.single('image'), async (req, res) => {
-  if (!['superadmin', 'supereditor'].includes(req.user.role)) return res.status(403).json({ message: 'Forbidden' });
+  if (!['superadmin', 'supereditor', 'editor'].includes(req.user.role)) return res.status(403).json({ message: 'Forbidden' });
   try {
     const event = await Event.findById(req.params.id);
     if (!event) return res.status(404).json({ message: 'Event not found' });
@@ -76,7 +76,7 @@ router.put('/:id', auth, upload.single('image'), async (req, res) => {
 
 // Delete event (superadmin or supereditor)
 router.delete('/:id', auth, async (req, res) => {
-  if (!['superadmin', 'supereditor'].includes(req.user.role)) return res.status(403).json({ message: 'Forbidden' });
+  if (!['superadmin', 'supereditor', 'editor'].includes(req.user.role)) return res.status(403).json({ message: 'Forbidden' });
   try {
     const event = await Event.findById(req.params.id);
     if (!event) return res.status(404).json({ message: 'Event not found' });
