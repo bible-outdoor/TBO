@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     async function fetchLibraryItems() {
       try {
-        const res = await fetch('https://tbo-c5wk.onrender.com/api/library');
+        const res = await fetch('https://tbo-qyda.onrender.com/api/library');
         if (!res.ok) throw new Error('API error');
         return await res.json();
       } catch {

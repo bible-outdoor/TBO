@@ -1,7 +1,7 @@
 // Fetch gallery data from backend API, fallback to localStorage if offline
 async function getGalleryData() {
   try {
-    const res = await fetch('https://tbo-c5wk.onrender.com/api/media');
+    const res = await fetch('https://tbo-qyda.onrender.com/api/media');
     if (!res.ok) throw new Error('API error');
     const data = await res.json();
     // Normalize for frontend: type: 'img'|'video' -> 'image'|'video', src: data

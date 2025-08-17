@@ -57,7 +57,7 @@ document.addEventListener("DOMContentLoaded", function () {
             };
             // Try to send to backend
             try {
-              await fetch('https://tbo-c5wk.onrender.com/api/testimonies', {
+              await fetch('https://tbo-qyda.onrender.com/api/testimonies', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(newTestimony)

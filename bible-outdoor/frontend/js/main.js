@@ -103,7 +103,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // --- DYNAMIC TESTIMONIES FOR HOMEPAGE ---
   const testimonyList = document.getElementById("testimony-list");
   if (testimonyList) {
-    fetch("https://tbo-c5wk.onrender.com/api/testimonies/public")
+    fetch("https://tbo-qyda.onrender.com/api/testimonies/public")
       .then(res => res.json())
       .then(testimonies => {
         // Show only the 2 latest testimonies
@@ -134,7 +134,7 @@ if (
   async function renderDynamicSermonVerses() {
     // Fetch from backend API
     try {
-      const res = await fetch('https://tbo-c5wk.onrender.com/api/sermons');
+      const res = await fetch('https://tbo-qyda.onrender.com/api/sermons');
       if (!res.ok) throw new Error('Failed to fetch verses');
       const verses = await res.json();
       const daily = verses.find(v => v.type === 'Daily');
@@ -264,7 +264,7 @@ if (
     // Fetch latest Sunday Service settings from backend
     let svc = { youtube: '', live: false };
     try {
-      const res = await fetch('https://tbo-c5wk.onrender.com/api/settings/sunday');
+      const res = await fetch('https://tbo-qyda.onrender.com/api/settings/sunday');
       if (res.ok) svc = await res.json();
     } catch (e) {}
     const link = svc.youtube && svc.youtube.trim() ? svc.youtube.trim() : "";
@@ -570,7 +570,7 @@ window.addEventListener('storage', function(e){
 
 async function fetchAndApplySiteSettings() {
   try {
-    const res = await fetch('https://tbo-c5wk.onrender.com/api/settings/site');
+    const res = await fetch('https://tbo-qyda.onrender.com/api/settings/site');
     if (res.ok) {
       const site = await res.json();
       localStorage.setItem('siteSettings', JSON.stringify(site));
