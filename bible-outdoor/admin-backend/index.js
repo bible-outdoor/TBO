@@ -27,15 +27,12 @@ const app = express();
 
 // --- CORS: Restrict to frontend domains (update before production!) ---
 const allowedOrigins = [
-  'http://localhost:3000', // Dev
-  'https://tbo-c5wk.onrender.com', // Production
+  'https://tbo-qyda.onrender.com/', // Production
   'http://127.0.0.1:3000', // Dev (added for completeness)
   'http://127.0.0.1:4000', // Dev (added for completeness)
   'http://127.0.0.1:5500', // Dev (your current frontend)
-  'https://bespoke-caramel-a297a0.netlify.app', // Netlify production
   'https://bibleoutdoor.netlify.app', // Netlify production (added for CORS)
   'https://yourdomain.com', // TODO: Replace with your production domain
-  'https://687767aeb25587993eb5382c--bibleoutdoor.netlify.app' // TODO: Replace with your production domain
 ];
 app.use(cors({
   origin: function(origin, callback) {

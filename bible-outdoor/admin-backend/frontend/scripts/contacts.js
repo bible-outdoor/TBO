@@ -28,7 +28,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
           if (user && message) {
             // Send to backend so it appears in admin panel
-            fetch('https://tbo-c5wk.onrender.com/api/contacts', {
+            fetch('https://tbo-qyda.onrender.com/api/contacts', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({

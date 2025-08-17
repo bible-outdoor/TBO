@@ -100,31 +100,237 @@ function openPublicLibraryFileModal(fileUrl, type, title) {
 
   const modal = document.createElement('div');
   modal.className = 'form-modal';
-  modal.style.maxWidth = '90vw';
-  modal.style.width = 'min(600px, 98vw)';
+  modal.style.maxWidth = '95vw';
+  modal.style.width = 'min(800px, 98vw)';
+  modal.style.maxHeight = '90vh';
+  modal.style.overflow = 'auto';
 
   let previewHtml = '';
+  let downloadText = 'Download';
+  
   if (type === 'pdf' || isPdf(fileUrl)) {
-    previewHtml = `<iframe src="https://docs.google.com/gview?url=${encodeURIComponent(fileUrl)}&embedded=true" style="width:100%;height:60vh;border:none;"></iframe>`;
+    // Enhanced PDF viewing with multiple options
+    previewHtml = `
+      <div style="margin-bottom: 1rem;">
+        <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem; justify-content: center; flex-wrap: wrap;">
+          <button onclick="switchPdfView('google')" class="media-btn pdf-view-btn active" id="google-view-btn">Google Docs View</button>
+          <button onclick="switchPdfView('direct')" class="media-btn pdf-view-btn" id="direct-view-btn">Direct View</button>
+          <button onclick="switchPdfView('download')" class="media-btn pdf-view-btn" id="download-view-btn">Download Only</button>
+        </div>
+        <div id="pdf-content">
+          <iframe src="https://docs.google.com/gview?url=${encodeURIComponent(fileUrl)}&embedded=true" 
+                  style="width:100%;height:60vh;border:none;border-radius:8px;" 
+                  id="google-pdf-viewer"></iframe>
+        </div>
+      </div>
+    `;
+    downloadText = 'Download PDF';
   } else if (type === 'video') {
-    previewHtml = `<video src="${fileUrl}" controls style="width:100%;max-height:60vh;"></video>`;
+    previewHtml = `
+      <video src="${fileUrl}" controls style="width:100%;max-height:60vh;border-radius:8px;" preload="metadata">
+        Your browser does not support the video tag.
+      </video>
+    `;
+    downloadText = 'Download Video';
   } else if (type === 'audio') {
-    previewHtml = `<audio src="${fileUrl}" controls style="width:100%;"></audio>`;
+    previewHtml = `
+      <div style="background: var(--sky); padding: 2rem; border-radius: 8px; text-align: center;">
+        <h4 style="margin-bottom: 1rem; color: var(--primary);">🎵 Audio File</h4>
+        <audio src="${fileUrl}" controls style="width:100%;max-width:400px;">
+          Your browser does not support the audio tag.
+        </audio>
+      </div>
+    `;
+    downloadText = 'Download Audio';
   } else if (type === 'img' || type === 'image') {
-    previewHtml = `<img src="${fileUrl}" alt="${title}" style="max-width:100%;max-height:60vh;" />`;
+    previewHtml = `
+      <div style="text-align: center;">
+        <img src="${fileUrl}" alt="${title}" style="max-width:100%;max-height:60vh;border-radius:8px;box-shadow: 0 4px 12px rgba(0,0,0,0.1);" />
+      </div>
+    `;
+    downloadText = 'Download Image';
   } else {
-    previewHtml = `<a href="${fileUrl}" target="_blank">Open File</a>`;
+    // For other file types, show file info and download option
+    const fileExtension = fileUrl.split('.').pop()?.toUpperCase() || 'FILE';
+    previewHtml = `
+      <div style="background: var(--sky); padding: 2rem; border-radius: 8px; text-align: center;">
+        <div style="font-size: 3rem; margin-bottom: 1rem;">📄</div>
+        <h4 style="margin-bottom: 0.5rem; color: var(--primary);">${fileExtension} File</h4>
+        <p style="color: var(--text-alt); margin-bottom: 1rem;">Click download to save this file to your device</p>
+      </div>
+    `;
+    downloadText = `Download ${fileExtension}`;
   }
 
   modal.innerHTML = `
     <button class="close-btn" onclick="document.getElementById('public-library-file-modal').remove()">×</button>
-    <h3 style="margin-bottom:1em;">${title || 'Preview'}</h3>
-    <div style="text-align:center; margin-bottom:1.2em;">
+    <h3 style="margin-bottom:1em;color:var(--primary);text-align:center;">${title || 'Document Preview'}</h3>
+    <div style="margin-bottom:1.2em;">
       ${previewHtml}
     </div>
-    <a href="${fileUrl}" download class="media-btn" style="margin-top:1em;">Download</a>
+    <div style="text-align:center;">
+      <a href="${fileUrl}" download class="media-btn" style="margin-top:1em;display:inline-block;">
+        📥 ${downloadText}
+      </a>
+    </div>
   `;
+  
   overlay.appendChild(modal);
   document.body.appendChild(overlay);
+  
+  // Add click outside to close functionality
+  overlay.addEventListener('click', function(e) {
+    if (e.target === overlay) {
+      overlay.remove();
+    }
+  });
 }
+
+// Function to switch between different PDF viewing options
+function switchPdfView(viewType) {
+  const pdfContent = document.getElementById('pdf-content');
+  const googleBtn = document.getElementById('google-view-btn');
+  const directBtn = document.getElementById('direct-view-btn');
+  const downloadBtn = document.getElementById('download-view-btn');
+  
+  // Remove active class from all buttons
+  [googleBtn, directBtn, downloadBtn].forEach(btn => btn.classList.remove('active'));
+  
+  if (viewType === 'google') {
+    googleBtn.classList.add('active');
+    pdfContent.innerHTML = `
+      <iframe src="https://docs.google.com/gview?url=${encodeURIComponent(currentPdfUrl)}&embedded=true" 
+              style="width:100%;height:60vh;border:none;border-radius:8px;" 
+              id="google-pdf-viewer"></iframe>
+    `;
+  } else if (viewType === 'direct') {
+    directBtn.classList.add('active');
+    pdfContent.innerHTML = `
+      <iframe src="${currentPdfUrl}" 
+              style="width:100%;height:60vh;border:none;border-radius:8px;" 
+              id="direct-pdf-viewer"></iframe>
+    `;
+  } else if (viewType === 'download') {
+    downloadBtn.classList.add('active');
+    pdfContent.innerHTML = `
+      <div style="background: var(--sky); padding: 2rem; border-radius: 8px; text-align: center;">
+        <div style="font-size: 3rem; margin-bottom: 1rem;">📄</div>
+        <h4 style="margin-bottom: 0.5rem; color: var(--primary);">PDF Document</h4>
+        <p style="color: var(--text-alt); margin-bottom: 1rem;">Click the download button below to save this PDF to your device</p>
+      </div>
+    `;
+  }
+}
+
+// Store current PDF URL for view switching
+let currentPdfUrl = '';
+
+// Update the openPublicLibraryFileModal to store the current PDF URL
+function openPublicLibraryFileModal(fileUrl, type, title) {
+  // Store current PDF URL for view switching
+  if (type === 'pdf' || (fileUrl && fileUrl.toLowerCase().endsWith('.pdf'))) {
+    currentPdfUrl = fileUrl;
+  }
+  
+  // Remove any existing modal
+  const existing = document.getElementById('public-library-file-modal');
+  if (existing) existing.remove();
+
+  function isPdf(url) {
+    return url && url.toLowerCase().endsWith('.pdf');
+  }
+
+  const overlay = document.createElement('div');
+  overlay.className = 'form-overlay';
+  overlay.id = 'public-library-file-modal';
+
+  const modal = document.createElement('div');
+  modal.className = 'form-modal';
+  modal.style.maxWidth = '95vw';
+  modal.style.width = 'min(800px, 98vw)';
+  modal.style.maxHeight = '90vh';
+  modal.style.overflow = 'auto';
+
+  let previewHtml = '';
+  let downloadText = 'Download';
+  
+  if (type === 'pdf' || isPdf(fileUrl)) {
+    // Enhanced PDF viewing with multiple options
+    previewHtml = `
+      <div style="margin-bottom: 1rem;">
+        <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem; justify-content: center; flex-wrap: wrap;">
+          <button onclick="switchPdfView('google')" class="media-btn pdf-view-btn active" id="google-view-btn">Google Docs View</button>
+          <button onclick="switchPdfView('direct')" class="media-btn pdf-view-btn" id="direct-view-btn">Direct View</button>
+          <button onclick="switchPdfView('download')" class="media-btn pdf-view-btn" id="download-view-btn">Download Only</button>
+        </div>
+        <div id="pdf-content">
+          <iframe src="https://docs.google.com/gview?url=${encodeURIComponent(fileUrl)}&embedded=true" 
+                  style="width:100%;height:60vh;border:none;border-radius:8px;" 
+                  id="google-pdf-viewer"></iframe>
+        </div>
+      </div>
+    `;
+    downloadText = 'Download PDF';
+  } else if (type === 'video') {
+    previewHtml = `
+      <video src="${fileUrl}" controls style="width:100%;max-height:60vh;border-radius:8px;" preload="metadata">
+        Your browser does not support the video tag.
+      </video>
+    `;
+    downloadText = 'Download Video';
+  } else if (type === 'audio') {
+    previewHtml = `
+      <div style="background: var(--sky); padding: 2rem; border-radius: 8px; text-align: center;">
+        <h4 style="margin-bottom: 1rem; color: var(--primary);">🎵 Audio File</h4>
+        <audio src="${fileUrl}" controls style="width:100%;max-width:400px;">
+          Your browser does not support the audio tag.
+        </audio>
+      </div>
+    `;
+    downloadText = 'Download Audio';
+  } else if (type === 'img' || type === 'image') {
+    previewHtml = `
+      <div style="text-align: center;">
+        <img src="${fileUrl}" alt="${title}" style="max-width:100%;max-height:60vh;border-radius:8px;box-shadow: 0 4px 12px rgba(0,0,0,0.1);" />
+      </div>
+    `;
+    downloadText = 'Download Image';
+  } else {
+    // For other file types, show file info and download option
+    const fileExtension = fileUrl.split('.').pop()?.toUpperCase() || 'FILE';
+    previewHtml = `
+      <div style="background: var(--sky); padding: 2rem; border-radius: 8px; text-align: center;">
+        <div style="font-size: 3rem; margin-bottom: 1rem;">📄</div>
+        <h4 style="margin-bottom: 0.5rem; color: var(--primary);">${fileExtension} File</h4>
+        <p style="color: var(--text-alt); margin-bottom: 1rem;">Click download to save this file to your device</p>
+      </div>
+    `;
+    downloadText = `Download ${fileExtension}`;
+  }
+
+  modal.innerHTML = `
+    <button class="close-btn" onclick="document.getElementById('public-library-file-modal').remove()">×</button>
+    <h3 style="margin-bottom:1em;color:var(--primary);text-align:center;">${title || 'Document Preview'}</h3>
+    <div style="margin-bottom:1.2em;">
+      ${previewHtml}
+    </div>
+    <div style="text-align:center;">
+      <a href="${fileUrl}" download class="media-btn" style="margin-top:1em;display:inline-block;">
+        📥 ${downloadText}
+      </a>
+    </div>
+  `;
+  
+  overlay.appendChild(modal);
+  document.body.appendChild(overlay);
+  
+  // Add click outside to close functionality
+  overlay.addEventListener('click', function(e) {
+    if (e.target === overlay) {
+      overlay.remove();
+    }
+  });
+}
+
 window.openPublicLibraryFileModal = openPublicLibraryFileModal;
+window.switchPdfView = switchPdfView;

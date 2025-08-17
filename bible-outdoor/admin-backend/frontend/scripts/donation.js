@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // --- Render donation settings and forms dynamically ---
   async function fetchDonationSettings() {
     try {
-      const res = await fetch('https://tbo-c5wk.onrender.com/api/settings/donation');
+              const res = await fetch('https://tbo-qyda.onrender.com/api/settings/donation');
       if (!res.ok) throw new Error('Failed to fetch donation settings');
       return await res.json();
     } catch {
@@ -49,7 +49,7 @@ document.addEventListener("DOMContentLoaded", function () {
           purpose: "Support"
         };
         try {
-          await fetch('https://tbo-c5wk.onrender.com/api/donations/public', {
+          await fetch('https://tbo-qyda.onrender.com/api/donations/public', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(donation)
@@ -138,7 +138,7 @@ document.addEventListener("DOMContentLoaded", function () {
           purpose: "Support"
         };
         try {
-          await fetch('https://tbo-c5wk.onrender.com/api/donations/public', {
+          await fetch('https://tbo-qyda.onrender.com/api/donations/public', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(donation)
