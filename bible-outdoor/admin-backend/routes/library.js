@@ -56,7 +56,9 @@ router.post('/upload', auth, upload.fields([
           // For PDFs, we'll use the PDF URL with transformation to get first page
           // Cloudinary can generate thumbnails from PDFs using transformations
           const pdfPublicId = fileResult.public_id;
-          coverUrl = `https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/raw/upload/c_thumb,w_300,h_400/v1/${pdfPublicId}.jpg`;
+          // Use fl_pg_1 for PDF first page, and try different transformation approaches
+          coverUrl = `https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/raw/upload/fl_pg_1,c_thumb,w_300,h_400/v1/${pdfPublicId}.jpg`;
+          console.log('[Library Upload] PDF cover URL generated:', coverUrl);
           // Note: We don't have a cover_public_id for auto-generated covers from transformations
           coverPublicId = '';
         } else if (fileResult.resource_type === 'image') {
@@ -156,7 +158,8 @@ router.put('/:id', auth, upload.fields([
         } else if (newFile.originalname && newFile.originalname.toLowerCase().endsWith('.pdf')) {
           // Generate PDF preview from new file using transformation
           const pdfPublicId = update.public_id;
-          update.cover = `https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/raw/upload/c_thumb,w_300,h_400/v1/${pdfPublicId}.jpg`;
+          update.cover = `https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/raw/upload/fl_pg_1,c_thumb,w_300,h_400/v1/${pdfPublicId}.jpg`;
+          console.log('[Library Update] PDF cover URL generated:', update.cover);
           update.cover_public_id = '';
         } else if (newFile.mimetype && newFile.mimetype.startsWith('image/')) {
           // Use new image as cover
