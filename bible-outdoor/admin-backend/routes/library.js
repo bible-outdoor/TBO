@@ -42,6 +42,39 @@ router.post('/upload', auth, upload.fields([
       const coverResult = await uploadMediaFromBuffer(req.files.cover[0].buffer, 'image', 'library_covers');
       coverUrl = coverResult.secure_url;
       coverPublicId = coverResult.public_id;
+    } else {
+      // Auto-generate cover from main file if no cover uploaded
+      try {
+        if (fileResult.resource_type === 'video') {
+          // Extract first frame from video
+          const coverResult = await uploadMediaFromBuffer(
+            mainFile.buffer,
+            'image',
+            'library_covers',
+            mainFile.originalname.replace(/\.[^/.]+$/, '_cover.jpg')
+          );
+          coverUrl = coverResult.secure_url;
+          coverPublicId = coverResult.public_id;
+        } else if (fileResult.resource_type === 'raw' && mainFile.originalname.toLowerCase().endsWith('.pdf')) {
+          // Generate PDF preview (first page)
+          const coverResult = await uploadMediaFromBuffer(
+            mainFile.buffer,
+            'image',
+            'library_covers',
+            mainFile.originalname.replace(/\.pdf$/i, '_cover.jpg')
+          );
+          coverUrl = coverResult.secure_url;
+          coverPublicId = coverResult.public_id;
+        } else if (fileResult.resource_type === 'image') {
+          // Use the image itself as cover
+          coverUrl = fileResult.secure_url;
+          coverPublicId = fileResult.public_id;
+        }
+        console.log('[Library Upload] Auto-generated cover:', coverUrl);
+      } catch (coverErr) {
+        console.error('[Library Upload] Cover generation failed:', coverErr.message);
+        // Continue without cover if generation fails
+      }
     }
 
     const { title, description, type, date } = req.body;
@@ -116,6 +149,42 @@ router.put('/:id', auth, upload.fields([
     const coverResult = await uploadMediaFromBuffer(req.files.cover[0].buffer, 'image', 'library_covers');
     update.cover = coverResult.secure_url;
     update.cover_public_id = coverResult.public_id;
+  } else if (req.files.file && req.files.file[0] && !req.files.cover) {
+    // Auto-generate new cover from new file if file was replaced but no new cover
+    try {
+      const newFile = req.files.file[0];
+      if (update.file && update.public_id) { // Only if file was actually updated
+        if (newFile.mimetype && newFile.mimetype.startsWith('video/')) {
+          // Extract first frame from new video
+          const coverResult = await uploadMediaFromBuffer(
+            newFile.buffer,
+            'image',
+            'library_covers',
+            newFile.originalname.replace(/\.[^/.]+$/, '_cover.jpg')
+          );
+          update.cover = coverResult.secure_url;
+          update.cover_public_id = coverResult.public_id;
+        } else if (newFile.originalname && newFile.originalname.toLowerCase().endsWith('.pdf')) {
+          // Generate PDF preview from new file
+          const coverResult = await uploadMediaFromBuffer(
+            newFile.buffer,
+            'image',
+            'library_covers',
+            newFile.originalname.replace(/\.pdf$/i, '_cover.jpg')
+          );
+          update.cover = coverResult.secure_url;
+          update.cover_public_id = coverResult.public_id;
+        } else if (newFile.mimetype && newFile.mimetype.startsWith('image/')) {
+          // Use new image as cover
+          update.cover = update.file;
+          update.cover_public_id = update.public_id;
+        }
+        console.log('[Library Update] Auto-generated new cover:', update.cover);
+      }
+    } catch (coverErr) {
+      console.error('[Library Update] Cover generation failed:', coverErr.message);
+      // Continue without updating cover if generation fails
+    }
   }
 
   const updated = await Library.findByIdAndUpdate(req.params.id, update, { new: true });
