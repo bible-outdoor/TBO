@@ -55,7 +55,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         card.innerHTML = `
-          <img src="${item.cover}" alt="${item.title}" class="library-cover-img" />
+          <img src="${item.cover || 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=='}" alt="${item.title}" class="library-cover-img" />
           <div class="media-info">
             <span class="media-title">${item.title}</span>
             <p class="media-caption">${item.description}</p>

@@ -947,7 +947,7 @@ async function renderLibrary() {
       const card = document.createElement("div");
       card.className = "media-card";
       card.innerHTML = `
-        <img src="${it.cover}" alt="${it.title}" class="media-img">
+        <img src="${it.cover || 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=='}" alt="${it.title}" class="media-img">
         <h4>${it.title}</h4>
         <p class="media-desc">${it.description}</p>
         <div class="media-meta">${it.type.toUpperCase()} | <span style="color:gray;">${it.date||""}</span></div>
@@ -1000,7 +1000,7 @@ async function showLibraryForm(id) {
         </select>
       </div>
       <div class="form-row"><label>Date:</label><input name="date" type="date" required value="${it.date}"></div>
-      <div class="form-row"><label>Cover Image:</label><input type="file" name="cover"${id == null ? ' required' : ''}></div>
+      <div class="form-row"><label>Cover Image:</label><input type="file" name="cover"></div>
       ${it.cover ? `<div class="form-row"><img src="${it.cover}" class="img-preview"></div>` : ""}
       <div class="form-row"><label>File (URL or Upload):</label><input name="fileUrl" value="${it.file || ''}" placeholder="Paste URL or upload file below"></div>
       <div class="form-row"><input type="file" name="file"></div>
