@@ -78,14 +78,9 @@ router.post('/upload', auth, upload.single('file'), async (req, res) => {
   if (!['superadmin', 'supereditor'].includes(req.user.role)) return res.status(403).json({ message: 'Forbidden' });
   if (!req.file) return res.status(400).json({ message: 'No file uploaded' });
 
-  // Determine resource type for Cloudinary
-  let resourceType = 'auto';
-  if (req.file.mimetype.startsWith('image/')) resourceType = 'image';
-  else if (req.file.mimetype.startsWith('video/')) resourceType = 'video';
-  else if (req.file.mimetype.startsWith('audio/')) resourceType = 'video'; // Cloudinary treats audio as 'video'
-
   try {
-    const result = await uploadMediaFromBuffer(req.file.buffer, resourceType, 'media');
+    // Use auto resource type so Cloudinary selects image/video/raw correctly
+    const result = await uploadMediaFromBuffer(req.file.buffer, 'auto', 'media', req.file.originalname);
     // Save to MongoDB
     const { title = '', date = '', type = resourceType } = req.body;
     const media = await Media.create({

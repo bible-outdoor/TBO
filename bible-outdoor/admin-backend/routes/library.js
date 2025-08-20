@@ -22,18 +22,11 @@ router.post('/upload', auth, upload.fields([
     if (!['superadmin', 'supereditor'].includes(req.user.role)) return res.status(403).json({ message: 'Forbidden' });
     if (!req.files || !req.files.file) return res.status(400).json({ message: 'No file uploaded' });
 
-    // Upload main file to Cloudinary
-    let resourceType = 'auto';
-    const fileMime = req.files.file[0].mimetype;
-    if (fileMime.startsWith('image/')) resourceType = 'image';
-    else if (fileMime.startsWith('video/')) resourceType = 'video';
-    else if (fileMime.startsWith('audio/')) resourceType = 'video'; // Cloudinary treats audio as video
-    else resourceType = 'raw'; // for pdf, doc, etc.
-
+    // Upload main file to Cloudinary using auto resource type to support images, videos, audio, and raw files (e.g., PDFs)
     const mainFile = req.files.file[0];
     const fileResult = await uploadMediaFromBuffer(
       mainFile.buffer,
-      resourceType,
+      'auto',
       'library',
       mainFile.originalname // Pass originalname to preserve extension for raw files
     );
@@ -91,17 +84,11 @@ router.put('/:id', auth, upload.fields([
         console.error('Cloudinary delete error:', err.message);
       }
     }
-    // Determine resourceType for upload based on mimetype
-    let resourceType = 'auto';
-    const fileMime = req.files.file[0].mimetype;
-    if (fileMime.startsWith('image/')) resourceType = 'image';
-    else if (fileMime.startsWith('video/')) resourceType = 'video';
-    else if (fileMime.startsWith('audio/')) resourceType = 'video'; // Cloudinary treats audio as video
-    else resourceType = 'raw';
+    // Upload replacement using auto resource type to correctly handle any file type
     const newFile = req.files.file[0];
     const fileResult = await uploadMediaFromBuffer(
       newFile.buffer,
-      resourceType,
+      'auto',
       'library',
       newFile.originalname // Pass originalname to preserve extension for raw files
     );

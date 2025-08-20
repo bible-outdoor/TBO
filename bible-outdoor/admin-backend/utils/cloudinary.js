@@ -11,23 +11,15 @@ cloudinary.config({
 // Upload media from buffer, preserving extension for raw files
 exports.uploadMediaFromBuffer = (fileBuffer, resourceType = 'auto', folder = 'media', originalname = '') => {
   return new Promise((resolve, reject) => {
-    let uploadOptions = {
-      resource_type: resourceType,
+    // Always pass through resource_type from caller (default 'auto').
+    // Keep folder structure; avoid forcing raw-specific public_id so Cloudinary can manage versions and URLs consistently.
+    const uploadOptions = {
+      resource_type: resourceType || 'auto',
+      folder,
+      filename_override: originalname || undefined,
+      use_filename: !!originalname,
+      unique_filename: true,
     };
-
-    // For raw uploads (PDF, DOC, etc.), preserve the original extension
-    if (resourceType === 'raw' && originalname) {
-      const ext = path.extname(originalname); // e.g., '.pdf'
-      let base = path.basename(originalname, ext);
-      // Sanitize base name: replace spaces with underscores and remove non-alphanumeric characters
-      base = base.replace(/\s+/g, '_').replace(/[^\w-]/g, '');
-      // For raw files, we construct the full public_id including the folder path.
-      // This is more explicit and avoids potential issues with how the SDK combines folder and public_id.
-      uploadOptions.public_id = `${folder}/${base}${ext}`;
-    } else {
-      // For other resource types, just use the folder option as before.
-      uploadOptions.folder = folder;
-    }
 
     const stream = cloudinary.uploader.upload_stream(
       uploadOptions,
