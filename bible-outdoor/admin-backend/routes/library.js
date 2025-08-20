@@ -24,12 +24,16 @@ router.post('/upload', auth, upload.fields([
 
     // Upload main file to Cloudinary using auto resource type to support images, videos, audio, and raw files (e.g., PDFs)
     const mainFile = req.files.file[0];
+    const isPdfUpload = (mainFile.mimetype && mainFile.mimetype.toLowerCase() === 'application/pdf') ||
+                        (mainFile.originalname && mainFile.originalname.toLowerCase().endsWith('.pdf'));
+    const resourceTypeForMain = isPdfUpload ? 'raw' : 'auto';
     const fileResult = await uploadMediaFromBuffer(
       mainFile.buffer,
-      'auto',
+      resourceTypeForMain,
       'library',
       mainFile.originalname // Pass originalname to preserve extension for raw files
     );
+    console.log('[Library Upload] main file resource_type=', fileResult.resource_type, 'url=', fileResult.secure_url);
 
     // Optional: upload cover image
     let coverUrl = '';
@@ -86,12 +90,16 @@ router.put('/:id', auth, upload.fields([
     }
     // Upload replacement using auto resource type to correctly handle any file type
     const newFile = req.files.file[0];
+    const isPdfReplacement = (newFile.mimetype && newFile.mimetype.toLowerCase() === 'application/pdf') ||
+                             (newFile.originalname && newFile.originalname.toLowerCase().endsWith('.pdf'));
+    const resourceTypeForReplacement = isPdfReplacement ? 'raw' : 'auto';
     const fileResult = await uploadMediaFromBuffer(
       newFile.buffer,
-      'auto',
+      resourceTypeForReplacement,
       'library',
       newFile.originalname // Pass originalname to preserve extension for raw files
     );
+    console.log('[Library Update] replacement file resource_type=', fileResult.resource_type, 'url=', fileResult.secure_url);
     update.file = fileResult.secure_url;
     update.public_id = fileResult.public_id;
   }

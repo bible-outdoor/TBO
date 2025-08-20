@@ -79,8 +79,12 @@ router.post('/upload', auth, upload.single('file'), async (req, res) => {
   if (!req.file) return res.status(400).json({ message: 'No file uploaded' });
 
   try {
-    // Use auto resource type so Cloudinary selects image/video/raw correctly
-    const result = await uploadMediaFromBuffer(req.file.buffer, 'auto', 'media', req.file.originalname);
+    const isPdfUpload = (req.file.mimetype && req.file.mimetype.toLowerCase() === 'application/pdf') ||
+                        (req.file.originalname && req.file.originalname.toLowerCase().endsWith('.pdf'));
+    const resourceTypeForUpload = isPdfUpload ? 'raw' : 'auto';
+    // Use 'raw' for PDFs and 'auto' otherwise so Cloudinary selects correctly
+    const result = await uploadMediaFromBuffer(req.file.buffer, resourceTypeForUpload, 'media', req.file.originalname);
+    console.log('[Media Upload] resource_type=', result.resource_type, 'url=', result.secure_url);
     // Save to MongoDB
     const { title = '', date = '', type = resourceType } = req.body;
     const media = await Media.create({
