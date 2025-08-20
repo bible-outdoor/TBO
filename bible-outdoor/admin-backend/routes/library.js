@@ -46,25 +46,19 @@ router.post('/upload', auth, upload.fields([
       // Auto-generate cover from main file if no cover uploaded
       try {
         if (fileResult.resource_type === 'video') {
-          // Extract first frame from video
-          const coverResult = await uploadMediaFromBuffer(
-            mainFile.buffer,
-            'image',
-            'library_covers',
-            mainFile.originalname.replace(/\.[^/.]+$/, '_cover.jpg')
-          );
-          coverUrl = coverResult.secure_url;
-          coverPublicId = coverResult.public_id;
+          // For videos, we'll use the video URL with transformation to get first frame
+          // Cloudinary can generate thumbnails from videos using transformations
+          const videoPublicId = fileResult.public_id;
+          coverUrl = `https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/video/upload/c_thumb,w_300,h_400,g_face/v1/${videoPublicId}.jpg`;
+          // Note: We don't have a cover_public_id for auto-generated covers from transformations
+          coverPublicId = '';
         } else if (fileResult.resource_type === 'raw' && mainFile.originalname.toLowerCase().endsWith('.pdf')) {
-          // Generate PDF preview (first page)
-          const coverResult = await uploadMediaFromBuffer(
-            mainFile.buffer,
-            'image',
-            'library_covers',
-            mainFile.originalname.replace(/\.pdf$/i, '_cover.jpg')
-          );
-          coverUrl = coverResult.secure_url;
-          coverPublicId = coverResult.public_id;
+          // For PDFs, we'll use the PDF URL with transformation to get first page
+          // Cloudinary can generate thumbnails from PDFs using transformations
+          const pdfPublicId = fileResult.public_id;
+          coverUrl = `https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/raw/upload/c_thumb,w_300,h_400/v1/${pdfPublicId}.jpg`;
+          // Note: We don't have a cover_public_id for auto-generated covers from transformations
+          coverPublicId = '';
         } else if (fileResult.resource_type === 'image') {
           // Use the image itself as cover
           coverUrl = fileResult.secure_url;
@@ -155,25 +149,15 @@ router.put('/:id', auth, upload.fields([
       const newFile = req.files.file[0];
       if (update.file && update.public_id) { // Only if file was actually updated
         if (newFile.mimetype && newFile.mimetype.startsWith('video/')) {
-          // Extract first frame from new video
-          const coverResult = await uploadMediaFromBuffer(
-            newFile.buffer,
-            'image',
-            'library_covers',
-            newFile.originalname.replace(/\.[^/.]+$/, '_cover.jpg')
-          );
-          update.cover = coverResult.secure_url;
-          update.cover_public_id = coverResult.public_id;
+          // Extract first frame from new video using transformation
+          const videoPublicId = update.public_id;
+          update.cover = `https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/video/upload/c_thumb,w_300,h_400,g_face/v1/${videoPublicId}.jpg`;
+          update.cover_public_id = '';
         } else if (newFile.originalname && newFile.originalname.toLowerCase().endsWith('.pdf')) {
-          // Generate PDF preview from new file
-          const coverResult = await uploadMediaFromBuffer(
-            newFile.buffer,
-            'image',
-            'library_covers',
-            newFile.originalname.replace(/\.pdf$/i, '_cover.jpg')
-          );
-          update.cover = coverResult.secure_url;
-          update.cover_public_id = coverResult.public_id;
+          // Generate PDF preview from new file using transformation
+          const pdfPublicId = update.public_id;
+          update.cover = `https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/raw/upload/c_thumb,w_300,h_400/v1/${pdfPublicId}.jpg`;
+          update.cover_public_id = '';
         } else if (newFile.mimetype && newFile.mimetype.startsWith('image/')) {
           // Use new image as cover
           update.cover = update.file;
