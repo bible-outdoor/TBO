@@ -4,7 +4,7 @@ const Library = require('../models/Library');
 const auth = require('../middleware/auth');
 const multer = require('multer');
 const upload = multer(); // memory storage
-const { uploadMediaFromBuffer, deleteMedia, cloudinary } = require('../utils/cloudinary');
+const { uploadMediaFromBuffer, deleteMedia } = require('../utils/cloudinary');
 
 // Get all library items (public)
 router.get('/', async (req, res) => {
@@ -34,9 +34,8 @@ router.post('/upload', auth, upload.fields([
       mainFile.originalname // Pass originalname to preserve extension for raw files
     );
     console.log('[Library Upload] main file resource_type=', fileResult.resource_type, 'type=', fileResult.type, 'secure_url=', fileResult.secure_url);
-    const fileUrlToSave = fileResult.resource_type === 'raw'
-      ? cloudinary.utils.private_download_url(fileResult.public_id, fileResult.format)
-      : fileResult.secure_url;
+    // Always save the public CDN URL (works for image/video/raw when type is 'upload')
+    const fileUrlToSave = fileResult.secure_url;
 
     // Optional: upload cover image
     let coverUrl = '';
@@ -103,9 +102,8 @@ router.put('/:id', auth, upload.fields([
       newFile.originalname // Pass originalname to preserve extension for raw files
     );
     console.log('[Library Update] replacement file resource_type=', fileResult.resource_type, 'type=', fileResult.type, 'secure_url=', fileResult.secure_url);
-    update.file = fileResult.resource_type === 'raw'
-      ? cloudinary.utils.private_download_url(fileResult.public_id, fileResult.format)
-      : fileResult.secure_url;
+    // Always save the public CDN URL
+    update.file = fileResult.secure_url;
     update.public_id = fileResult.public_id;
   }
 
