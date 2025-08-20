@@ -16,6 +16,9 @@ exports.uploadMediaFromBuffer = (fileBuffer, resourceType = 'auto', folder = 'me
     const uploadOptions = {
       resource_type: resourceType || 'auto',
       folder,
+      // Force public, unsigned delivery (exposed via res.cloudinary.com)
+      type: 'upload',
+      access_mode: 'public',
       filename_override: originalname || undefined,
       use_filename: !!originalname,
       unique_filename: true,
