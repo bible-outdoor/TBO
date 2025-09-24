@@ -5,6 +5,7 @@ const auth = require('../middleware/auth');
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
+const { sendAdminInviteEmail } = require('../utils/mailer');
 
 // Get all users (superadmin only)
 router.get('/', auth, async (req, res) => {
@@ -41,7 +42,29 @@ router.post('/', auth, async (req, res) => {
     // Construct one-time login link (frontend should handle this route)
     const baseUrl = process.env.ADMIN_ONBOARD_URL || 'https://tbo-qyda.onrender.com/frontend/admin/login.html';
     const oneTimeLink = `${baseUrl}?token=${oneTimeToken}&email=${encodeURIComponent(email)}`;
-    res.json({ success: true, user, oneTimeLink, defaultPassword: originalPassword });
+    
+    // Send admin invitation email automatically
+    try {
+      await sendAdminInviteEmail(email, oneTimeLink, originalPassword, name);
+      res.json({ 
+        success: true, 
+        user, 
+        oneTimeLink, 
+        defaultPassword: originalPassword,
+        emailSent: true,
+        message: 'Admin user created and invitation email sent successfully'
+      });
+    } catch (emailError) {
+      console.error('Failed to send admin invite email:', emailError);
+      res.json({ 
+        success: true, 
+        user, 
+        oneTimeLink, 
+        defaultPassword: originalPassword,
+        emailSent: false,
+        message: 'Admin user created but failed to send invitation email. Please share the credentials manually.'
+      });
+    }
   } catch (err) {
     res.status(500).json({ message: err.message || 'Server error' });
   }
