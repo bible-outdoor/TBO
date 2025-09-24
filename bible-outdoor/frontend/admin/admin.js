@@ -257,6 +257,13 @@ document.addEventListener("DOMContentLoaded", function () {
       e.preventDefault();
       const email = document.getElementById('adminEmail').value.trim();
       const password = document.getElementById('adminPass').value;
+      const submitBtn = document.getElementById('formBtn');
+      const originalBtnText = submitBtn.textContent;
+
+      // Show loading state
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<span class="loading-spinner"></span> Logging in...';
+      loginMsg.textContent = '';
 
       // Prepare login payload
       let payload;
@@ -281,9 +288,13 @@ document.addEventListener("DOMContentLoaded", function () {
         if (!res.ok || !data.token) {
           loginMsg.textContent = data.message || "Login failed.";
           loginMsg.style.color = "#c0392b";
+          // Reset button state
+          submitBtn.disabled = false;
+          submitBtn.textContent = originalBtnText;
           return;
         }
         setAdminSession(data.token, data.user);
+        submitBtn.innerHTML = '<span class="success-icon">✓</span> Success! Redirecting...';
         if (data.user.mustChangePassword) {
           window.location.href = "change-password.html";
         } else {
@@ -292,6 +303,9 @@ document.addEventListener("DOMContentLoaded", function () {
       } catch (err) {
         loginMsg.textContent = "Network error. Please try again.";
         loginMsg.style.color = "#c0392b";
+        // Reset button state
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalBtnText;
       }
     });
   }
