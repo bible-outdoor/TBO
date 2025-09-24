@@ -16,7 +16,7 @@ async function sendVerificationEmail(to, code, subject = 'Verify your email for 
     text: `Your verification code is: ${code}`,
     html: `
       <div style="text-align:center;">
-        <img src="https://res.cloudinary.com/dby5luwcf/image/upload/v1752499890/logo3_ckqlzk.png" alt="Logo" style="width:120px; height:auto; margin-bottom:20px;"/>
+        <img src="https://res.cloudinary.com/dby5luwcf/image/upload/v1752499890/logo3_ckqlzk.png" alt="The Bible Outdoor Logo" style="width:120px; height:auto; margin-bottom:20px; display: block; margin-left: auto; margin-right: auto;"/>
       </div>
       <p style="font-size:1.1em;">Your verification code is: <b>${code}</b></p>
       <p style="color:#888; font-size:0.95em;">If you did not request this, please ignore this email.</p>

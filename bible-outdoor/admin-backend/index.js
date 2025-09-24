@@ -27,7 +27,8 @@ const app = express();
 
 // --- CORS: Restrict to frontend domains (update before production!) ---
 const allowedOrigins = [
-  'https://tbo-qyda.onrender.com/', // Production
+  'https://tbo-qyda.onrender.com', // Production (without trailing slash)
+  'https://tbo-qyda.onrender.com/', // Production (with trailing slash)
   'http://127.0.0.1:3000', // Dev (added for completeness)
   'http://127.0.0.1:4000', // Dev (added for completeness)
   'http://127.0.0.1:5500', // Dev (your current frontend)

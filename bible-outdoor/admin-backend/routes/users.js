@@ -26,6 +26,8 @@ router.post('/', auth, async (req, res) => {
     // Generate one-time token and expiry
     const oneTimeToken = crypto.randomBytes(32).toString('hex');
     const oneTimeTokenExpires = new Date(Date.now() + 30 * 60 * 1000); // 30 minutes
+    // Store the original password before it gets hashed
+    const originalPassword = pass;
     const user = await User.create({
       email,
       pass, // pass is plain here, will be hashed by pre-save hook
@@ -39,7 +41,7 @@ router.post('/', auth, async (req, res) => {
     // Construct one-time login link (frontend should handle this route)
     const baseUrl = process.env.ADMIN_ONBOARD_URL || 'https://tbo-qyda.onrender.com/frontend/admin/login.html';
     const oneTimeLink = `${baseUrl}?token=${oneTimeToken}&email=${encodeURIComponent(email)}`;
-    res.json({ success: true, user, oneTimeLink, defaultPassword: pass });
+    res.json({ success: true, user, oneTimeLink, defaultPassword: originalPassword });
   } catch (err) {
     res.status(500).json({ message: err.message || 'Server error' });
   }
