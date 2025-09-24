@@ -229,6 +229,51 @@ body {
   text-decoration: underline;
 }
 
+/* Public Site Password Requirements Styling */
+.requirement-public {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 0;
+  font-size: 0.9em;
+  color: #888;
+  transition: color 0.3s ease;
+}
+
+.req-icon-public {
+  font-weight: bold;
+  font-size: 0.8em;
+  width: 16px;
+  text-align: center;
+}
+
+#password-requirements-public {
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid var(--soft-gray);
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin: 8px 0;
+}
+
+#password-match-public {
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid var(--soft-gray);
+  border-radius: 8px;
+  padding: 8px 16px;
+  margin: 8px 0;
+}
+
+/* Dark theme support for public requirements */
+[data-theme="dark"] #password-requirements-public,
+[data-theme="dark"] #password-match-public {
+  background: rgba(24, 28, 32, 0.8);
+  border-color: #3a3f47;
+}
+
+[data-theme="dark"] .requirement-public {
+  color: #9fa7b3;
+}
+
 /* Mission & Belief */
 .mission-belief,
 .service-testimonials {
