@@ -25,6 +25,9 @@ const membersRoutes = require('./routes/members');
 
 const app = express();
 
+// --- Trust proxy (required for rate limiting behind Render proxy) ---
+app.set('trust proxy', true);
+
 // --- CORS: Restrict to frontend domains (update before production!) ---
 const allowedOrigins = [
   'https://tbo-qyda.onrender.com', // Production (without trailing slash)
