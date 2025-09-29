@@ -37,7 +37,7 @@ router.post('/', auth, async (req, res) => {
       mustChangePassword: true
     });
     // Construct one-time login link (frontend should handle this route)
-    const baseUrl = process.env.ADMIN_ONBOARD_URL || 'https://tbo-c5wk.onrender.com/frontend/admin/login.html';
+    const baseUrl = process.env.ADMIN_ONBOARD_URL || 'https://tbo-qyda.onrender.com/frontend/admin/login.html';
     const oneTimeLink = `${baseUrl}?token=${oneTimeToken}&email=${encodeURIComponent(email)}`;
     res.json({ success: true, user, oneTimeLink, defaultPassword: pass });
   } catch (err) {
