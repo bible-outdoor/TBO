@@ -212,20 +212,24 @@ document.addEventListener("DOMContentLoaded", function () {
           body: JSON.stringify({ name, email, password: pass })
         });
         const data = await res.json();
-        if (!data.message) {
+        
+        // Check if registration was successful
+        if (!res.ok || !data.success) {
           hideButtonLoader(submitBtn);
           return showMessage(data.message || "Registration failed", false);
         }
         
-        // Show success state
-        showSuccessLoader(submitBtn, "Account created! Check email...");
-        
-        // If not verified, show verification modal
-        if (data.message && /not verified|verify your email/i.test(data.message)) {
+        // Only proceed to verification if registration was successful
+        if (data.success) {
+          // Show success state
+          showSuccessLoader(submitBtn, "Account created! Check email...");
+          
+          // Show verification modal for successful registrations
           showVerifyModal(email);
         } else {
-          // Show custom verification modal (normal flow)
-          showVerifyModal(email);
+          // Handle specific error cases (like email already exists)
+          hideButtonLoader(submitBtn);
+          return showMessage(data.message || "Registration failed", false);
         }
         form.reset();
         isLogin = true;
