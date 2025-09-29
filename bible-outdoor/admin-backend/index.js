@@ -20,14 +20,14 @@ const contactsRoutes = require('./routes/contacts');
 const settingsRoutes = require('./routes/settings');
 const contactRepliesRoutes = require('./routes/contactReplies');
 const pastorMsgsRoutes = require('./routes/pastorMsgs');
-const testimoniesRoutes = require('./routes/testimonies');
 const membersRoutes = require('./routes/members');
 
 const app = express();
 
 // --- CORS: Restrict to frontend domains (update before production!) ---
 const allowedOrigins = [
-  'https://tbo-qyda.onrender.com/', // Production
+  'https://tbo-qyda.onrender.com', // Production (without trailing slash)
+  'https://tbo-qyda.onrender.com/', // Production (with trailing slash)
   'http://127.0.0.1:3000', // Dev (added for completeness)
   'http://127.0.0.1:4000', // Dev (added for completeness)
   'http://127.0.0.1:5500', // Dev (your current frontend)
@@ -84,7 +84,7 @@ app.use('/api/members', membersRoutes);
 app.use('/frontend', express.static(path.join(__dirname, '../frontend')));
 
 // --- DB connection ---
-mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(process.env.MONGO_URI)
   .then(()=>console.log('MongoDB connected'))
   .catch(err=>console.error('MongoDB connection error:', err));
 
