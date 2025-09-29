@@ -123,13 +123,19 @@ document.addEventListener("DOMContentLoaded", function () {
   function showButtonLoader(btn, text) {
     if (!btn) return;
     btn.disabled = true;
+    btn.classList.add('loading');
     btn._oldText = btn.innerHTML;
-    btn.innerHTML = text + '<span class="button-loader"></span>';
+    btn.innerHTML = `<span class="loading-text"><span class="spinner"></span>${text}</span>`;
   }
   function hideButtonLoader(btn) {
     if (!btn) return;
     btn.disabled = false;
+    btn.classList.remove('loading');
     if (btn._oldText) btn.innerHTML = btn._oldText;
+  }
+  function showSuccessLoader(btn, text) {
+    if (!btn) return;
+    btn.innerHTML = `<span class="loading-text">✅ ${text}</span>`;
   }
 
   // Account creation and login (SECURE, BACKEND)
@@ -139,7 +145,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const pass = passwordInput.value.trim();
     if (isLogin) {
       if (!email || !pass) return showMessage("Enter both email and password.", false);
-      showButtonLoader(submitBtn, "Login");
+      showButtonLoader(submitBtn, "Logging in...");
       try {
         const res = await fetch(`${API_BASE}/api/members/login`, {
           method: "POST",
@@ -156,9 +162,10 @@ document.addEventListener("DOMContentLoaded", function () {
           return showMessage(data.message || "Login failed", false);
         }
         setMemberSession(data.token, data.member);
+        showSuccessLoader(submitBtn, "Success! Welcome back!");
         showMessage("✅ Login successful. Welcome back, " + data.member.name + "!");
         form.reset();
-        setTimeout(() => showWelcome(data.member.name), 800);
+        setTimeout(() => showWelcome(data.member.name), 1200);
       } catch (err) {
         showMessage("Server error. Please try again.", false);
       } finally {
@@ -172,7 +179,7 @@ document.addEventListener("DOMContentLoaded", function () {
       if (!name || !email || !pass || !confirmPass) return showMessage("Please fill out all fields.", false);
       if (!passwordRequirements.test(pass)) return showMessage("Password must be at least 8 characters, include uppercase, lowercase, a number, and a special character.", false);
       if (pass !== confirmPass) return showMessage("Passwords do not match!", false);
-      showButtonLoader(submitBtn, "Join Us");
+      showButtonLoader(submitBtn, "Creating account...");
       try {
         const res = await fetch(`${API_BASE}/api/members/register`, {
           method: "POST",
@@ -184,6 +191,10 @@ document.addEventListener("DOMContentLoaded", function () {
           hideButtonLoader(submitBtn);
           return showMessage(data.message || "Registration failed", false);
         }
+        
+        // Show success state
+        showSuccessLoader(submitBtn, "Account created! Check email...");
+        
         // If not verified, show verification modal
         if (data.message && /not verified|verify your email/i.test(data.message)) {
           showVerifyModal(email);
@@ -384,7 +395,7 @@ document.addEventListener("DOMContentLoaded", function () {
         resetMsgs[idx].style.color = "#c0392b";
         return;
       }
-      showButtonLoader(btn, "Send Code");
+      showButtonLoader(btn, "Sending code...");
       btn.disabled = true;
       resetMsgs[idx].style.display = "none";
       try {
@@ -433,7 +444,7 @@ document.addEventListener("DOMContentLoaded", function () {
         resetMsgs[idx].style.color = "#c0392b";
         return;
       }
-      showButtonLoader(btn, "Verify");
+      showButtonLoader(btn, "Verifying...");
       btn.disabled = true;
       try {
         const res = await fetch(`${API_BASE}/api/members/verify-reset-code`, {
@@ -482,7 +493,7 @@ document.addEventListener("DOMContentLoaded", function () {
         resetMsgs[idx].style.color = "#c0392b";
         return;
       }
-      showButtonLoader(resetPasswordBtns[idx], "Reset Password");
+      showButtonLoader(resetPasswordBtns[idx], "Resetting password...");
       try {
         const res = await fetch(`${API_BASE}/api/members/reset-password`, {
           method: "POST",
@@ -491,10 +502,11 @@ document.addEventListener("DOMContentLoaded", function () {
         });
         const data = await res.json();
         if (res.ok) {
+          showSuccessLoader(resetPasswordBtns[idx], "Success! Password reset!");
           resetMsgs[idx].textContent = "✅ Password reset! You can now log in.";
           resetMsgs[idx].style.color = "var(--primary)";
           resetMsgs[idx].style.display = "block";
-          setTimeout(() => { resetModals[idx].style.display = "none"; }, 1200);
+          setTimeout(() => { resetModals[idx].style.display = "none"; }, 1500);
         } else {
           resetMsgs[idx].textContent = data.message || "Failed to reset password.";
           resetMsgs[idx].style.color = "#c0392b";

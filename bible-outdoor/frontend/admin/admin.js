@@ -371,7 +371,8 @@ document.addEventListener("DOMContentLoaded", function() {
       
       // Show loading state
       formBtn.disabled = true;
-      const originalText = formBtn.textContent;
+      formBtn.classList.add('loading');
+      const originalText = formBtn.innerHTML;
       formBtn.innerHTML = '<span class="loading-text"><span class="spinner"></span>Logging in...</span>';
       try {
         // --- Use backend API for authentication ---
@@ -384,17 +385,24 @@ document.addEventListener("DOMContentLoaded", function() {
         if (!data.success) throw new Error(data.message || "Invalid credentials");
         // Store token and user info for session
         setAdminSession(data.token, data.user);
-        if (data.user.mustChangePassword) {
-          window.location.href = "change-password.html";
-        } else {
-          window.location.href = "dashboard.html";
-        }
+        
+        // Show success message
+        formBtn.innerHTML = '<span class="loading-text">✅ Success! Redirecting...</span>';
+        
+        setTimeout(() => {
+          if (data.user.mustChangePassword) {
+            window.location.href = "change-password.html";
+          } else {
+            window.location.href = "dashboard.html";
+          }
+        }, 1200);
       } catch (err) {
         loginMsg.textContent = err.message || "Login failed.";
         loginMsg.style.color = "#c0392b";
         
         // Reset button state
         formBtn.disabled = false;
+        formBtn.classList.remove('loading');
         formBtn.innerHTML = originalText;
       }
     };
