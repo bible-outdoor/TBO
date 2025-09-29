@@ -806,3 +806,235 @@ footer {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
+
+/* Join Form Styling */
+.join-form {
+  background: var(--white);
+  padding: 2.5em 2em 2em 2em;
+  border-radius: var(--border-radius);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+  max-width: 420px;
+  width: 100%;
+  margin: 1.5em auto;
+  border: 1px solid rgba(2, 136, 209, 0.1);
+  position: relative;
+}
+
+.join-form h3 {
+  color: var(--primary);
+  text-align: center;
+  margin-bottom: 1.5em;
+  font-size: 1.4em;
+  font-weight: 600;
+}
+
+.join-form input[type="text"],
+.join-form input[type="email"],
+.join-form input[type="password"] {
+  width: 100%;
+  padding: 0.9em 1em;
+  border: 2px solid var(--soft-gray);
+  border-radius: 0.7em;
+  font-size: 1em;
+  margin-bottom: 1em;
+  box-sizing: border-box;
+  transition: border-color 0.3s, box-shadow 0.3s;
+  background: var(--white);
+  color: var(--dark);
+}
+
+.join-form input[type="text"]:focus,
+.join-form input[type="email"]:focus,
+.join-form input[type="password"]:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(2, 136, 209, 0.1);
+}
+
+.join-form button[type="submit"] {
+  width: 100%;
+  background: linear-gradient(135deg, var(--primary), #1565c0);
+  color: white;
+  padding: 0.9em 1.5em;
+  border: none;
+  border-radius: 0.7em;
+  font-size: 1.1em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  margin-top: 0.5em;
+  box-shadow: 0 4px 12px rgba(2, 136, 209, 0.3);
+}
+
+.join-form button[type="submit"]:hover {
+  background: linear-gradient(135deg, #1565c0, var(--primary));
+  box-shadow: 0 6px 16px rgba(2, 136, 209, 0.4);
+  transform: translateY(-1px);
+}
+
+.join-form button[type="submit"]:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.login-link {
+  text-align: center;
+  margin-top: 1.5em;
+  color: var(--dark);
+}
+
+.login-link a {
+  color: var(--primary);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.login-link a:hover {
+  text-decoration: underline;
+}
+
+/* Password Requirements Styling */
+.password-requirements {
+  background: var(--sky);
+  border: 1px solid rgba(2, 136, 209, 0.2);
+  border-radius: 0.7em;
+  padding: 1em;
+  margin: 0.8em 0;
+  font-size: 0.9em;
+}
+
+.password-requirements h4 {
+  margin: 0 0 0.8em 0;
+  color: var(--primary);
+  font-size: 1em;
+  font-weight: 600;
+}
+
+.requirement {
+  display: flex;
+  align-items: center;
+  margin: 0.4em 0;
+  transition: color 0.3s;
+}
+
+.requirement-icon {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  margin-right: 0.6em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: bold;
+  transition: all 0.3s;
+}
+
+.requirement.invalid {
+  color: #c0392b;
+}
+
+.requirement.invalid .requirement-icon {
+  background: #ffebee;
+  border: 2px solid #e57373;
+}
+
+.requirement.invalid .requirement-icon::before {
+  content: "✗";
+  color: #c0392b;
+}
+
+.requirement.valid {
+  color: #27ae60;
+}
+
+.requirement.valid .requirement-icon {
+  background: #e8f5e8;
+  border: 2px solid #81c784;
+}
+
+.requirement.valid .requirement-icon::before {
+  content: "✓";
+  color: #27ae60;
+}
+
+/* Password Match Indicator */
+.password-match {
+  display: flex;
+  align-items: center;
+  margin: 0.8em 0;
+  padding: 0.6em;
+  border-radius: 0.5em;
+  font-size: 0.9em;
+  font-weight: 500;
+  transition: all 0.3s;
+}
+
+.password-match.invalid {
+  background: #ffebee;
+  color: #c0392b;
+  border: 1px solid #ffcdd2;
+}
+
+.password-match.valid {
+  background: #e8f5e8;
+  color: #27ae60;
+  border: 1px solid #c8e6c9;
+}
+
+.password-match .requirement-icon {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  margin-right: 0.6em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: bold;
+}
+
+.password-match.invalid .requirement-icon {
+  background: #ffcdd2;
+  border: 2px solid #e57373;
+}
+
+.password-match.invalid .requirement-icon::before {
+  content: "✗";
+  color: #c0392b;
+}
+
+.password-match.valid .requirement-icon {
+  background: #c8e6c9;
+  border: 2px solid #81c784;
+}
+
+.password-match.valid .requirement-icon::before {
+  content: "✓";
+  color: #27ae60;
+}
+
+/* Form Message Styling */
+#form-message {
+  padding: 0.8em;
+  border-radius: 0.5em;
+  margin: 1em 0;
+  font-weight: 500;
+  text-align: center;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+  .join-form {
+    padding: 2em 1.5em 1.5em 1.5em;
+    margin: 1em auto;
+  }
+  
+  .join-form input[type="text"],
+  .join-form input[type="email"],
+  .join-form input[type="password"] {
+    padding: 0.8em;
+    font-size: 16px; /* Prevents zoom on iOS */
+  }
+}

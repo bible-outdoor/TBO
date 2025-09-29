@@ -43,12 +43,22 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function updateFieldRequirements() {
+    const passwordHint = document.getElementById('password-hint');
+    const requirementsDiv = document.getElementById('publicPasswordRequirements');
+    const matchDiv = document.getElementById('publicPasswordMatch');
+    
     if (isLogin) {
       nameInput.removeAttribute("required");
       confirmInput.removeAttribute("required");
+      // Hide password requirements for login
+      if (passwordHint) passwordHint.style.display = 'none';
+      if (requirementsDiv) requirementsDiv.style.display = 'none';
+      if (matchDiv) matchDiv.style.display = 'none';
     } else {
       nameInput.setAttribute("required", "required");
       confirmInput.setAttribute("required", "required");
+      // Show password requirements for signup
+      if (passwordHint) passwordHint.style.display = 'block';
     }
   }
   updateFieldRequirements();
@@ -84,6 +94,10 @@ document.addEventListener("DOMContentLoaded", function () {
     form.style.display = "none";
     logoutBtn.style.display = "inline-block";
     welcomeName.textContent = `${name}`;
+    // Hide Join Us button when logged in
+    if (showRegisterBtn) {
+      showRegisterBtn.style.display = "none";
+    }
   }
 
   // Handle logout
@@ -91,7 +105,10 @@ document.addEventListener("DOMContentLoaded", function () {
     clearMemberSession();
     logoutBtn.style.display = "none";
     welcomeName.textContent = "";
-    form.style.display = "block";
+    form.style.display = "none";
+    if (showRegisterBtn) {
+      showRegisterBtn.style.display = "inline-block";
+    }
   });
 
   // Toggle between login and register
@@ -110,6 +127,14 @@ document.addEventListener("DOMContentLoaded", function () {
       form.reset();
       messageBox.style.display = 'none';
       updateForgotPasswordLink();
+      
+      // Hide password requirements when switching to login
+      const requirementsDiv = document.getElementById('publicPasswordRequirements');
+      const matchDiv = document.getElementById('publicPasswordMatch');
+      if (isLogin) {
+        if (requirementsDiv) requirementsDiv.style.display = 'none';
+        if (matchDiv) matchDiv.style.display = 'none';
+      }
     }
   });
 
@@ -125,7 +150,7 @@ document.addEventListener("DOMContentLoaded", function () {
     btn.disabled = true;
     btn.classList.add('loading');
     btn._oldText = btn.innerHTML;
-    btn.innerHTML = `<span class="loading-text"><span class="spinner"></span>${text}</span>`;
+    btn.innerHTML = text;
   }
   function hideButtonLoader(btn) {
     if (!btn) return;
@@ -135,7 +160,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
   function showSuccessLoader(btn, text) {
     if (!btn) return;
-    btn.innerHTML = `<span class="loading-text">✅ ${text}</span>`;
+    btn.innerHTML = `✅ ${text}`;
   }
 
   // Account creation and login (SECURE, BACKEND)
@@ -658,20 +683,28 @@ document.addEventListener("DOMContentLoaded", function () {
     authPasswordInput.addEventListener('input', function() {
       const password = this.value;
       
-      if (password === '') {
-        requirementsDiv.style.display = 'none';
-      } else {
-        requirementsDiv.style.display = 'block';
-        validatePasswordRequirements(password);
-      }
-      
-      // Also check password match if confirm field has content
-      if (confirmPasswordInput.value !== '') {
-        validatePasswordMatch();
+      // Only show requirements during signup mode
+      if (!isLogin) {
+        if (password === '') {
+          requirementsDiv.style.display = 'none';
+        } else {
+          requirementsDiv.style.display = 'block';
+          validatePasswordRequirements(password);
+        }
+        
+        // Also check password match if confirm field has content
+        if (confirmPasswordInput.value !== '') {
+          validatePasswordMatch();
+        }
       }
     });
 
-    confirmPasswordInput.addEventListener('input', validatePasswordMatch);
+    confirmPasswordInput.addEventListener('input', function() {
+      // Only validate password match during signup mode
+      if (!isLogin) {
+        validatePasswordMatch();
+      }
+    });
 
     // Update the form validation to use real-time results
     const originalFormValidation = form.onsubmit;
