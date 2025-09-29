@@ -26,7 +26,12 @@ const membersRoutes = require('./routes/members');
 const app = express();
 
 // --- Trust proxy (required for rate limiting behind Render proxy) ---
-app.set('trust proxy', true);
+// Configure trust proxy more specifically for Render
+if (process.env.NODE_ENV === 'production') {
+  app.set('trust proxy', 1); // Trust first proxy (Render)
+} else {
+  app.set('trust proxy', false); // Don't trust proxy in development
+}
 
 // --- CORS: Restrict to frontend domains (update before production!) ---
 const allowedOrigins = [
@@ -53,8 +58,28 @@ app.use(cors({
 // --- Rate Limiting for Auth Endpoints ---
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 10, // limit each IP to 10 requests per windowMs
-  message: 'Too many attempts, please try again later.'
+  max: 20, // Increased limit to be less restrictive during testing
+  message: { error: 'Too many attempts, please try again later.' },
+  standardHeaders: true,
+  legacyHeaders: false,
+  // Improved key generator for proxy environments
+  keyGenerator: (req) => {
+    // Get the real IP from various headers that proxies might set
+    const forwarded = req.headers['x-forwarded-for'];
+    const real = req.headers['x-real-ip'];
+    const ip = forwarded ? forwarded.split(',')[0].trim() : 
+               real || req.ip || req.connection.remoteAddress || 'unknown';
+    return ip;
+  },
+  // Custom handler for when limit is exceeded
+  handler: (req, res) => {
+    res.status(429).json({
+      success: false,
+      message: 'Too many requests. Please try again in 15 minutes.'
+    });
+  },
+  // Skip rate limiting in development
+  skip: (req) => process.env.NODE_ENV === 'development'
 });
 app.use('/api/auth/login', authLimiter);
 app.use('/api/members/login', authLimiter);
