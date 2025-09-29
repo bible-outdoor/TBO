@@ -61,15 +61,12 @@ body {
 }
 .navbar button img {
   width: 28px;
-  height: 18px;
   margin-right: 0;
 }
 
 .nav-logo {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  font-size: 1.2rem;
   font-weight: bold;
   white-space: nowrap;
 }

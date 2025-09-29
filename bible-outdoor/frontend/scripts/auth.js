@@ -53,6 +53,9 @@ document.addEventListener("DOMContentLoaded", function () {
   }
   updateFieldRequirements();
 
+  // Real-time password validation setup
+  setupRealTimeValidation();
+
   // Use JWT for member authentication
   function setMemberSession(token, member) {
     localStorage.setItem("tbo_member_jwt", token);
@@ -471,8 +474,10 @@ document.addEventListener("DOMContentLoaded", function () {
       const email = resetEmails[idx].value.trim().toLowerCase();
       const code = resetCodeInputs[idx].value.trim();
       const newPass = newPasswordInputs[idx].value.trim();
-      if (!newPass || newPass.length < 6) {
-        resetMsgs[idx].textContent = "Password must be at least 6 characters.";
+      // Use same password requirements as registration
+      const passwordRequirements = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d]).{8,}$/;
+      if (!passwordRequirements.test(newPass)) {
+        resetMsgs[idx].textContent = "Password must be at least 8 characters, include uppercase, lowercase, a number, and a special character.";
         resetMsgs[idx].style.display = "block";
         resetMsgs[idx].style.color = "#c0392b";
         return;
@@ -537,4 +542,148 @@ document.addEventListener("DOMContentLoaded", function () {
     form.style.display = "none";
     showRegisterBtn.style.display = "inline-block";
   });
+
+  // Real-time password validation function
+  function setupRealTimeValidation() {
+    const authPasswordInput = document.getElementById('auth-password');
+    const confirmPasswordInput = document.getElementById('confirm-password');
+    const passwordHint = document.getElementById('password-hint');
+    
+    if (!authPasswordInput || !confirmPasswordInput || !passwordHint) return;
+
+    // Create requirements container dynamically
+    const requirementsDiv = document.createElement('div');
+    requirementsDiv.className = 'password-requirements';
+    requirementsDiv.id = 'publicPasswordRequirements';
+    requirementsDiv.style.display = 'none';
+    requirementsDiv.innerHTML = `
+      <h4>Password Requirements:</h4>
+      <div class="requirement invalid" id="public-req-length">
+        <span class="requirement-icon"></span>
+        At least 8 characters
+      </div>
+      <div class="requirement invalid" id="public-req-uppercase">
+        <span class="requirement-icon"></span>
+        One uppercase letter
+      </div>
+      <div class="requirement invalid" id="public-req-lowercase">
+        <span class="requirement-icon"></span>
+        One lowercase letter
+      </div>
+      <div class="requirement invalid" id="public-req-number">
+        <span class="requirement-icon"></span>
+        One number
+      </div>
+      <div class="requirement invalid" id="public-req-special">
+        <span class="requirement-icon"></span>
+        One special character
+      </div>
+    `;
+
+    // Create password match indicator
+    const matchDiv = document.createElement('div');
+    matchDiv.className = 'password-match invalid';
+    matchDiv.id = 'publicPasswordMatch';
+    matchDiv.style.display = 'none';
+    matchDiv.innerHTML = `
+      <span class="requirement-icon"></span>
+      <span id="publicMatchText">Passwords do not match</span>
+    `;
+
+    // Insert after password hint
+    passwordHint.insertAdjacentElement('afterend', requirementsDiv);
+    
+    // Insert after confirm password field
+    const confirmField = document.getElementById('confirm-password-field');
+    if (confirmField) {
+      confirmField.insertAdjacentElement('afterend', matchDiv);
+    }
+
+    // Validation functions
+    function validatePasswordRequirements(password) {
+      const requirements = {
+        'public-req-length': password.length >= 8,
+        'public-req-uppercase': /[A-Z]/.test(password),
+        'public-req-lowercase': /[a-z]/.test(password),
+        'public-req-number': /\d/.test(password),
+        'public-req-special': /[^A-Za-z\d]/.test(password)
+      };
+
+      Object.keys(requirements).forEach(reqId => {
+        const element = document.getElementById(reqId);
+        if (element) {
+          element.className = requirements[reqId] ? 'requirement valid' : 'requirement invalid';
+        }
+      });
+
+      return Object.values(requirements).every(Boolean);
+    }
+
+    function validatePasswordMatch() {
+      const newPass = authPasswordInput.value;
+      const confirmPass = confirmPasswordInput.value;
+      const matchText = document.getElementById('publicMatchText');
+      
+      if (confirmPass === '') {
+        matchDiv.style.display = 'none';
+        return false;
+      }
+
+      matchDiv.style.display = 'flex';
+      
+      if (newPass === confirmPass) {
+        matchDiv.className = 'password-match valid';
+        if (matchText) matchText.textContent = 'Passwords match';
+        return true;
+      } else {
+        matchDiv.className = 'password-match invalid';
+        if (matchText) matchText.textContent = 'Passwords do not match';
+        return false;
+      }
+    }
+
+    // Event listeners for real-time validation
+    authPasswordInput.addEventListener('input', function() {
+      const password = this.value;
+      
+      if (password === '') {
+        requirementsDiv.style.display = 'none';
+      } else {
+        requirementsDiv.style.display = 'block';
+        validatePasswordRequirements(password);
+      }
+      
+      // Also check password match if confirm field has content
+      if (confirmPasswordInput.value !== '') {
+        validatePasswordMatch();
+      }
+    });
+
+    confirmPasswordInput.addEventListener('input', validatePasswordMatch);
+
+    // Update the form validation to use real-time results
+    const originalFormValidation = form.onsubmit;
+    form.addEventListener('submit', function(e) {
+      if (!isLogin) {
+        const password = authPasswordInput.value;
+        const confirmPassword = confirmPasswordInput.value;
+        
+        // Use real-time validation results
+        const requirementsMet = validatePasswordRequirements(password);
+        const passwordsMatch = validatePasswordMatch();
+        
+        if (!requirementsMet) {
+          e.preventDefault();
+          showMessage('Please meet all password requirements.', false);
+          return false;
+        }
+        
+        if (!passwordsMatch) {
+          e.preventDefault();
+          showMessage('Passwords do not match.', false);
+          return false;
+        }
+      }
+    });
+  }
 });

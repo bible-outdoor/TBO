@@ -414,6 +414,71 @@ button[disabled], input[type="submit"][disabled] {
   align-items: center;
 }
 
+/* Password validation styles */
+.password-requirements {
+  font-size: 0.9em;
+  margin: 0.5em 0;
+  padding: 0.8em;
+  border-radius: 6px;
+  background: var(--bg-alt);
+  border: 1px solid #e1e1e1;
+}
+
+.password-requirements h4 {
+  margin: 0 0 0.5em 0;
+  color: var(--primary);
+  font-size: 0.95em;
+}
+
+.requirement {
+  display: flex;
+  align-items: center;
+  margin: 0.3em 0;
+  font-size: 0.85em;
+}
+
+.requirement-icon {
+  margin-right: 0.5em;
+  font-size: 1.1em;
+  width: 16px;
+  text-align: center;
+}
+
+.requirement.valid {
+  color: #22c55e;
+}
+
+.requirement.invalid {
+  color: #ef4444;
+}
+
+.requirement.valid .requirement-icon::before {
+  content: '✓';
+}
+
+.requirement.invalid .requirement-icon::before {
+  content: '✗';
+}
+
+.password-match {
+  font-size: 0.85em;
+  margin: 0.3em 0 0.5em 0;
+  display: flex;
+  align-items: center;
+}
+
+.password-match.valid {
+  color: #22c55e;
+}
+
+.password-match.invalid {
+  color: #ef4444;
+}
+
+.password-match .requirement-icon {
+  margin-right: 0.5em;
+}
+
 .section-actions {
   margin-bottom: 1.5em;
   display: flex;
