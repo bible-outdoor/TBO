@@ -20,6 +20,7 @@ const contactsRoutes = require('./routes/contacts');
 const settingsRoutes = require('./routes/settings');
 const contactRepliesRoutes = require('./routes/contactReplies');
 const pastorMsgsRoutes = require('./routes/pastorMsgs');
+const testimoniesRoutes = require('./routes/testimonies');
 const membersRoutes = require('./routes/members');
 
 const app = express();
