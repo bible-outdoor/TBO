@@ -366,8 +366,13 @@ document.addEventListener("DOMContentLoaded", function() {
       const email = document.getElementById('adminEmail').value.trim().toLowerCase();
       const pass = document.getElementById('adminPass').value;
       const loginMsg = document.getElementById('adminLoginMsg');
+      const formBtn = document.getElementById('formBtn');
       loginMsg.textContent = '';
-      document.getElementById('formBtn').disabled = true;
+      
+      // Show loading state
+      formBtn.disabled = true;
+      const originalText = formBtn.textContent;
+      formBtn.innerHTML = '<span class="loading-text"><span class="spinner"></span>Logging in...</span>';
       try {
         // --- Use backend API for authentication ---
         const res = await fetch('https://tbo-qyda.onrender.com/api/auth/login', {
@@ -387,7 +392,10 @@ document.addEventListener("DOMContentLoaded", function() {
       } catch (err) {
         loginMsg.textContent = err.message || "Login failed.";
         loginMsg.style.color = "#c0392b";
-        document.getElementById('formBtn').disabled = false;
+        
+        // Reset button state
+        formBtn.disabled = false;
+        formBtn.innerHTML = originalText;
       }
     };
   } else {
