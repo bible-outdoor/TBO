@@ -373,7 +373,7 @@ document.addEventListener("DOMContentLoaded", function() {
       formBtn.disabled = true;
       formBtn.classList.add('loading');
       const originalText = formBtn.innerHTML;
-      formBtn.innerHTML = '<span class="loading-text"><span class="spinner"></span>Logging in...</span>';
+      formBtn.innerHTML = '<span class="loading-text">Logging in...</span>';
       try {
         // --- Use backend API for authentication ---
         const res = await fetch('https://tbo-qyda.onrender.com/api/auth/login', {
