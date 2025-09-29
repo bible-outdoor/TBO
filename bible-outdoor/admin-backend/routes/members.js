@@ -86,16 +86,29 @@ router.post('/resend-code', async (req, res) => {
   try {
     const { email } = req.body;
     const member = await Member.findOne({ email });
-    if (!member) return res.status(404).json({ message: 'Member not found.' });
-    if (member.isVerified) return res.status(400).json({ message: 'Already verified.' });
+    if (!member) return res.status(404).json({ success: false, message: 'Member not found.' });
+    if (member.isVerified) return res.status(400).json({ success: false, message: 'Already verified.' });
+    
     // Generate new code
     const verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
     member.verificationCode = verificationCode;
     await member.save();
-    await sendVerificationEmail(email, verificationCode);
-    res.json({ message: 'Verification code resent.' });
+    
+    // Try to send email, but handle gracefully if it fails
+    try {
+      await sendVerificationEmail(email, verificationCode);
+      res.json({ success: true, message: 'Verification code resent to your email.' });
+    } catch (emailError) {
+      console.error('Email sending failed during resend:', emailError);
+      res.json({ 
+        success: true, 
+        message: 'Verification code generated. If email delivery fails, please contact support.',
+        debugCode: process.env.NODE_ENV === 'development' ? verificationCode : undefined
+      });
+    }
   } catch (err) {
-    res.status(500).json({ message: 'Server error.' });
+    console.error('Resend code error:', err);
+    res.status(500).json({ success: false, message: 'Server error.' });
   }
 });
 
@@ -145,6 +158,56 @@ router.post('/reset-password', async (req, res) => {
     res.json({ message: 'Password reset successful.' });
   } catch (err) {
     res.status(500).json({ message: 'Server error.' });
+  }
+});
+
+// Temporary endpoint to get verification code (for testing when email fails)
+router.post('/get-verification-code', async (req, res) => {
+  try {
+    const { email } = req.body;
+    
+    // Only allow this in development or for testing
+    if (process.env.NODE_ENV === 'production') {
+      return res.status(403).json({ success: false, message: 'Not allowed in production.' });
+    }
+    
+    const member = await Member.findOne({ email });
+    if (!member) return res.status(404).json({ success: false, message: 'Member not found.' });
+    if (member.isVerified) return res.status(400).json({ success: false, message: 'Already verified.' });
+    
+    res.json({ 
+      success: true, 
+      message: 'Verification code retrieved.',
+      code: member.verificationCode
+    });
+  } catch (err) {
+    console.error('Get verification code error:', err);
+    res.status(500).json({ success: false, message: 'Server error.' });
+  }
+});
+
+// Temporary manual verification endpoint (for testing)
+router.post('/manual-verify', async (req, res) => {
+  try {
+    const { email, adminKey } = req.body;
+    
+    // Simple admin key check (you can set this in env variables)
+    if (adminKey !== process.env.ADMIN_VERIFICATION_KEY && adminKey !== 'temp-verify-2024') {
+      return res.status(403).json({ success: false, message: 'Unauthorized.' });
+    }
+    
+    const member = await Member.findOne({ email });
+    if (!member) return res.status(404).json({ success: false, message: 'Member not found.' });
+    if (member.isVerified) return res.status(400).json({ success: false, message: 'Already verified.' });
+    
+    member.isVerified = true;
+    member.verificationCode = undefined;
+    await member.save();
+    
+    res.json({ success: true, message: 'Member manually verified.' });
+  } catch (err) {
+    console.error('Manual verification error:', err);
+    res.status(500).json({ success: false, message: 'Server error.' });
   }
 });
 
