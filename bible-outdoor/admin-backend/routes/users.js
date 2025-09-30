@@ -5,7 +5,7 @@ const auth = require('../middleware/auth');
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
-const { sendAdminInvitationEmail } = require('../utils/mailer');
+const { sendAdminInvitationEmail, testGmailConnection } = require('../utils/mailer');
 
 // Get all users (superadmin only)
 router.get('/', auth, async (req, res) => {
@@ -137,6 +137,22 @@ router.post('/change-password', auth, async (req, res) => {
     res.json({ success: true });
   } catch (err) {
     res.status(500).json({ message: err.message || 'Server error.' });
+  }
+});
+
+// Test Gmail connection endpoint (superadmin only)
+router.post('/test-gmail', auth, async (req, res) => {
+  try {
+    if (req.user.role !== 'superadmin') return res.status(403).json({ message: 'Forbidden' });
+    
+    const isConnected = await testGmailConnection();
+    res.json({ 
+      success: isConnected, 
+      message: isConnected ? 'Gmail connection successful!' : 'Gmail connection failed - check server logs for details'
+    });
+  } catch (err) {
+    console.error('Gmail test error:', err);
+    res.status(500).json({ success: false, message: 'Server error during Gmail test' });
   }
 });
 

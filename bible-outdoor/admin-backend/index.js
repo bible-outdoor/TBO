@@ -120,6 +120,14 @@ mongoose.connect(process.env.MONGO_URI)
 // --- Cloudinary config ---
 require('./utils/cloudinary'); // Ensure config loads at startup
 
+// --- Test Gmail connection on startup ---
+const { testGmailConnection } = require('./utils/mailer');
+setTimeout(async () => {
+  console.log('\n📧 Testing Gmail configuration...');
+  await testGmailConnection();
+  console.log('📧 Gmail test completed\n');
+}, 3000); // Wait 3 seconds after server start
+
 // --- Server start ---
 app.listen(process.env.PORT, () => console.log(`Server running on port ${process.env.PORT}`));
 app.get('/', (req, res) => res.send('Admin backend running!'));

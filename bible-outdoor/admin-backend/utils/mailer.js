@@ -4,16 +4,23 @@ const nodemailer = require('nodemailer');
 let transporter;
 try {
   transporter = nodemailer.createTransport({
-    service: 'gmail',
+    host: 'smtp.gmail.com',
+    port: 587,
+    secure: false, // Use TLS
     auth: {
       user: process.env.GMAIL_USER,
       pass: process.env.GMAIL_PASS
     },
-    // Add additional Gmail configuration
-    secure: false, // Use TLS
     tls: {
       rejectUnauthorized: false
-    }
+    },
+    // Add timeout and connection settings
+    connectionTimeout: 60000, // 60 seconds
+    greetingTimeout: 30000, // 30 seconds
+    socketTimeout: 60000, // 60 seconds
+    // Add debug for troubleshooting
+    debug: process.env.NODE_ENV !== 'production',
+    logger: process.env.NODE_ENV !== 'production'
   });
 } catch (error) {
   console.error('Failed to create email transporter:', error);
@@ -175,4 +182,41 @@ async function sendAdminInvitationEmail(to, defaultPassword, inviteToken) {
   }
 }
 
-module.exports = { sendVerificationEmail, sendAdminInvitationEmail };
+// Test Gmail connection
+async function testGmailConnection() {
+  if (!transporter) {
+    console.log('❌ Email transporter not available');
+    return false;
+  }
+
+  if (!process.env.GMAIL_USER || !process.env.GMAIL_PASS) {
+    console.log('❌ Gmail credentials not configured');
+    console.log('GMAIL_USER:', process.env.GMAIL_USER ? '✅ Set' : '❌ Missing');
+    console.log('GMAIL_PASS:', process.env.GMAIL_PASS ? '✅ Set' : '❌ Missing');
+    return false;
+  }
+
+  try {
+    console.log('🔗 Testing Gmail SMTP connection...');
+    await transporter.verify();
+    console.log('✅ Gmail SMTP connection successful!');
+    return true;
+  } catch (error) {
+    console.error('❌ Gmail SMTP connection failed:', error.message);
+    console.log('📧 Using Gmail user:', process.env.GMAIL_USER);
+    console.log('🔐 Gmail pass length:', process.env.GMAIL_PASS ? process.env.GMAIL_PASS.length : 0);
+    
+    // Provide specific error guidance
+    if (error.code === 'ETIMEDOUT') {
+      console.log('💡 Connection timeout - check network/firewall settings');
+    } else if (error.code === 'EAUTH') {
+      console.log('💡 Authentication failed - check Gmail credentials and app password');
+    } else if (error.code === 'ENOTFOUND') {
+      console.log('💡 DNS resolution failed - check internet connection');
+    }
+    
+    return false;
+  }
+}
+
+module.exports = { sendVerificationEmail, sendAdminInvitationEmail, testGmailConnection };
