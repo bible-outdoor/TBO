@@ -1,29 +1,75 @@
 const nodemailer = require('nodemailer');
 
-// Create transporter with better error handling
-let transporter;
-try {
-  transporter = nodemailer.createTransport({
-    host: 'smtp.gmail.com',
-    port: 587,
-    secure: false, // Use TLS
-    auth: {
-      user: process.env.GMAIL_USER,
-      pass: process.env.GMAIL_PASS
-    },
-    tls: {
-      rejectUnauthorized: false
-    },
-    // Add timeout and connection settings
-    connectionTimeout: 60000, // 60 seconds
-    greetingTimeout: 30000, // 30 seconds
-    socketTimeout: 60000, // 60 seconds
-    // Add debug for troubleshooting
-    debug: process.env.NODE_ENV !== 'production',
-    logger: process.env.NODE_ENV !== 'production'
-  });
-} catch (error) {
-  console.error('Failed to create email transporter:', error);
+// SMTP configuration options for better Render compatibility
+const smtpConfigs = [
+  {
+    name: 'Gmail SSL (Port 465)',
+    config: {
+      host: 'smtp.gmail.com',
+      port: 465,
+      secure: true, // Use SSL
+      auth: {
+        user: process.env.GMAIL_USER,
+        pass: process.env.GMAIL_PASS
+      },
+      connectionTimeout: 30000,
+      greetingTimeout: 15000,
+      socketTimeout: 30000
+    }
+  },
+  {
+    name: 'Gmail TLS (Port 587)',
+    config: {
+      host: 'smtp.gmail.com',
+      port: 587,
+      secure: false, // Use TLS
+      auth: {
+        user: process.env.GMAIL_USER,
+        pass: process.env.GMAIL_PASS
+      },
+      tls: {
+        rejectUnauthorized: false
+      },
+      connectionTimeout: 30000,
+      greetingTimeout: 15000,
+      socketTimeout: 30000
+    }
+  }
+];
+
+// Start with the first configuration
+let transporter = nodemailer.createTransport(smtpConfigs[0].config);
+let currentConfigIndex = 0;
+
+// Function to try different SMTP configurations
+async function tryBestTransporter() {
+  for (let i = 0; i < smtpConfigs.length; i++) {
+    const { name, config } = smtpConfigs[i];
+    try {
+      console.log(`🔧 Trying ${name}...`);
+      const testTransporter = nodemailer.createTransport(config);
+      
+      // Test the connection with shorter timeout
+      await new Promise((resolve, reject) => {
+        const timeout = setTimeout(() => reject(new Error('Quick test timeout')), 10000);
+        testTransporter.verify((error, success) => {
+          clearTimeout(timeout);
+          if (error) reject(error);
+          else resolve(success);
+        });
+      });
+      
+      console.log(`✅ ${name} working!`);
+      transporter = testTransporter;
+      currentConfigIndex = i;
+      return true;
+    } catch (error) {
+      console.log(`❌ ${name} failed: ${error.message}`);
+    }
+  }
+  
+  console.log('⚠️ All SMTP configurations failed, using fallback');
+  return false;
 }
 
 async function sendVerificationEmail(to, code, subject = 'Verify your email for The Bible Outdoor') {
@@ -182,13 +228,8 @@ async function sendAdminInvitationEmail(to, defaultPassword, inviteToken) {
   }
 }
 
-// Test Gmail connection
+// Test Gmail connection with multiple configurations
 async function testGmailConnection() {
-  if (!transporter) {
-    console.log('❌ Email transporter not available');
-    return false;
-  }
-
   if (!process.env.GMAIL_USER || !process.env.GMAIL_PASS) {
     console.log('❌ Gmail credentials not configured');
     console.log('GMAIL_USER:', process.env.GMAIL_USER ? '✅ Set' : '❌ Missing');
@@ -196,27 +237,20 @@ async function testGmailConnection() {
     return false;
   }
 
-  try {
-    console.log('🔗 Testing Gmail SMTP connection...');
-    await transporter.verify();
-    console.log('✅ Gmail SMTP connection successful!');
+  console.log('🔗 Testing Gmail SMTP configurations...');
+  const success = await tryBestTransporter();
+  
+  if (success) {
+    console.log(`✅ Gmail SMTP connection successful using ${smtpConfigs[currentConfigIndex].name}!`);
     return true;
-  } catch (error) {
-    console.error('❌ Gmail SMTP connection failed:', error.message);
+  } else {
+    console.log('❌ All Gmail SMTP configurations failed');
     console.log('📧 Using Gmail user:', process.env.GMAIL_USER);
     console.log('🔐 Gmail pass length:', process.env.GMAIL_PASS ? process.env.GMAIL_PASS.length : 0);
-    
-    // Provide specific error guidance
-    if (error.code === 'ETIMEDOUT') {
-      console.log('💡 Connection timeout - check network/firewall settings');
-    } else if (error.code === 'EAUTH') {
-      console.log('💡 Authentication failed - check Gmail credentials and app password');
-    } else if (error.code === 'ENOTFOUND') {
-      console.log('💡 DNS resolution failed - check internet connection');
-    }
-    
+    console.log('💡 This may be due to Render network restrictions');
+    console.log('💡 Consider using a different email service or external SMTP relay');
     return false;
   }
 }
 
-module.exports = { sendVerificationEmail, sendAdminInvitationEmail, testGmailConnection };
+module.exports = { sendVerificationEmail, sendAdminInvitationEmail, testGmailConnection, tryBestTransporter };
