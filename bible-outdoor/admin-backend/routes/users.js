@@ -5,6 +5,7 @@ const auth = require('../middleware/auth');
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
+const { sendAdminInvitationEmail } = require('../utils/mailer');
 
 // Get all users (superadmin only)
 router.get('/', auth, async (req, res) => {
@@ -36,10 +37,29 @@ router.post('/', auth, async (req, res) => {
       oneTimeTokenExpires,
       mustChangePassword: true
     });
-    // Construct one-time login link (frontend should handle this route)
-    const baseUrl = process.env.ADMIN_ONBOARD_URL || 'https://tbo-qyda.onrender.com/frontend/admin/login.html';
-    const oneTimeLink = `${baseUrl}?token=${oneTimeToken}&email=${encodeURIComponent(email)}`;
-    res.json({ success: true, user, oneTimeLink, defaultPassword: pass });
+    // Send beautiful admin invitation email
+    try {
+      await sendAdminInvitationEmail(email, pass, oneTimeToken);
+      res.json({ 
+        success: true, 
+        user, 
+        message: 'Admin created successfully and invitation email sent.',
+        defaultPassword: pass 
+      });
+    } catch (emailError) {
+      console.error('Failed to send admin invitation email:', emailError);
+      // Still return success since user was created, just inform about email issue
+      const baseUrl = process.env.ADMIN_ONBOARD_URL || 'https://tbo-qyda.onrender.com/frontend/admin/login.html';
+      const oneTimeLink = `${baseUrl}?token=${oneTimeToken}&email=${encodeURIComponent(email)}`;
+      res.json({ 
+        success: true, 
+        user, 
+        oneTimeLink, 
+        defaultPassword: pass,
+        message: 'Admin created successfully but email sending failed. Use the provided link.',
+        emailError: true
+      });
+    }
   } catch (err) {
     res.status(500).json({ message: err.message || 'Server error' });
   }
