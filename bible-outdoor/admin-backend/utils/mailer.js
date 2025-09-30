@@ -1,7 +1,23 @@
 const nodemailer = require('nodemailer');
 
-// SMTP configuration options for better Render compatibility
+// SMTP configuration options with cloud-friendly alternatives
 const smtpConfigs = [
+  {
+    name: 'SendGrid SMTP (Render-friendly)',
+    config: {
+      host: 'smtp.sendgrid.net',
+      port: 587,
+      secure: false,
+      auth: {
+        user: 'apikey',
+        pass: process.env.SENDGRID_API_KEY
+      },
+      connectionTimeout: 20000,
+      greetingTimeout: 10000,
+      socketTimeout: 20000
+    },
+    requiresEnv: 'SENDGRID_API_KEY'
+  },
   {
     name: 'Gmail SSL (Port 465)',
     config: {
@@ -12,10 +28,11 @@ const smtpConfigs = [
         user: process.env.GMAIL_USER,
         pass: process.env.GMAIL_PASS
       },
-      connectionTimeout: 30000,
-      greetingTimeout: 15000,
-      socketTimeout: 30000
-    }
+      connectionTimeout: 15000,
+      greetingTimeout: 10000,
+      socketTimeout: 15000
+    },
+    requiresEnv: 'GMAIL_USER,GMAIL_PASS'
   },
   {
     name: 'Gmail TLS (Port 587)',
@@ -30,10 +47,11 @@ const smtpConfigs = [
       tls: {
         rejectUnauthorized: false
       },
-      connectionTimeout: 30000,
-      greetingTimeout: 15000,
-      socketTimeout: 30000
-    }
+      connectionTimeout: 15000,
+      greetingTimeout: 10000,
+      socketTimeout: 15000
+    },
+    requiresEnv: 'GMAIL_USER,GMAIL_PASS'
   }
 ];
 
@@ -41,17 +59,31 @@ const smtpConfigs = [
 let transporter = nodemailer.createTransport(smtpConfigs[0].config);
 let currentConfigIndex = 0;
 
+// Check if required environment variables are set for a config
+function hasRequiredEnvVars(requiresEnv) {
+  if (!requiresEnv) return true;
+  const envVars = requiresEnv.split(',');
+  return envVars.every(envVar => process.env[envVar?.trim()]);
+}
+
 // Function to try different SMTP configurations
 async function tryBestTransporter() {
   for (let i = 0; i < smtpConfigs.length; i++) {
-    const { name, config } = smtpConfigs[i];
+    const { name, config, requiresEnv } = smtpConfigs[i];
+    
+    // Check if required environment variables are set
+    if (!hasRequiredEnvVars(requiresEnv)) {
+      console.log(`⏭️ Skipping ${name} - missing environment variables: ${requiresEnv}`);
+      continue;
+    }
+    
     try {
       console.log(`🔧 Trying ${name}...`);
       const testTransporter = nodemailer.createTransport(config);
       
       // Test the connection with shorter timeout
       await new Promise((resolve, reject) => {
-        const timeout = setTimeout(() => reject(new Error('Quick test timeout')), 10000);
+        const timeout = setTimeout(() => reject(new Error('Quick test timeout')), 8000);
         testTransporter.verify((error, success) => {
           clearTimeout(timeout);
           if (error) reject(error);
@@ -73,9 +105,12 @@ async function tryBestTransporter() {
 }
 
 async function sendVerificationEmail(to, code, subject = 'Verify your email for The Bible Outdoor') {
-  // Check if email credentials are configured
-  if (!process.env.GMAIL_USER || !process.env.GMAIL_PASS) {
-    console.log('Email credentials not configured. Verification code for', to, ':', code);
+  // Check if any email credentials are configured
+  const hasGmail = process.env.GMAIL_USER && process.env.GMAIL_PASS;
+  const hasSendGrid = process.env.SENDGRID_API_KEY;
+  
+  if (!hasGmail && !hasSendGrid) {
+    console.log('No email service configured. Verification code for', to, ':', code);
     throw new Error('Email service not configured');
   }
 
@@ -85,7 +120,7 @@ async function sendVerificationEmail(to, code, subject = 'Verify your email for 
   }
 
   const mailOptions = {
-    from: process.env.GMAIL_USER,
+    from: process.env.SENDGRID_FROM_EMAIL || process.env.GMAIL_USER || 'noreply@thebibleoutdoor.com',
     to,
     subject,
     text: `Your verification code is: ${code}`,
@@ -112,9 +147,12 @@ async function sendVerificationEmail(to, code, subject = 'Verify your email for 
 
 // Send admin invitation email with professional template
 async function sendAdminInvitationEmail(to, defaultPassword, inviteToken) {
-  // Check if email credentials are configured
-  if (!process.env.GMAIL_USER || !process.env.GMAIL_PASS) {
-    console.log('Email credentials not configured. Admin invitation for', to, 'Password:', defaultPassword);
+  // Check if any email credentials are configured
+  const hasGmail = process.env.GMAIL_USER && process.env.GMAIL_PASS;
+  const hasSendGrid = process.env.SENDGRID_API_KEY;
+  
+  if (!hasGmail && !hasSendGrid) {
+    console.log('No email service configured. Admin invitation for', to, 'Password:', defaultPassword);
     throw new Error('Email service not configured');
   }
 
@@ -128,7 +166,7 @@ async function sendAdminInvitationEmail(to, defaultPassword, inviteToken) {
     : 'https://tbo-qyda.onrender.com/frontend/admin/login.html';
 
   const mailOptions = {
-    from: process.env.GMAIL_USER,
+    from: process.env.SENDGRID_FROM_EMAIL || process.env.GMAIL_USER || 'noreply@thebibleoutdoor.com',
     to,
     subject: 'Welcome to The Bible Outdoor - Admin Access Granted',
     html: `
@@ -228,27 +266,34 @@ async function sendAdminInvitationEmail(to, defaultPassword, inviteToken) {
   }
 }
 
-// Test Gmail connection with multiple configurations
+// Test email connection with multiple configurations
 async function testGmailConnection() {
-  if (!process.env.GMAIL_USER || !process.env.GMAIL_PASS) {
-    console.log('❌ Gmail credentials not configured');
-    console.log('GMAIL_USER:', process.env.GMAIL_USER ? '✅ Set' : '❌ Missing');
-    console.log('GMAIL_PASS:', process.env.GMAIL_PASS ? '✅ Set' : '❌ Missing');
+  const hasGmail = process.env.GMAIL_USER && process.env.GMAIL_PASS;
+  const hasSendGrid = process.env.SENDGRID_API_KEY;
+  
+  console.log('📧 Available email services:');
+  console.log('SendGrid:', hasSendGrid ? '✅ SENDGRID_API_KEY set' : '❌ Missing SENDGRID_API_KEY');
+  console.log('Gmail:', hasGmail ? '✅ GMAIL_USER & GMAIL_PASS set' : '❌ Missing GMAIL credentials');
+  
+  if (!hasGmail && !hasSendGrid) {
+    console.log('❌ No email service credentials configured');
     return false;
   }
 
-  console.log('🔗 Testing Gmail SMTP configurations...');
+  console.log('🔗 Testing email SMTP configurations...');
   const success = await tryBestTransporter();
   
   if (success) {
-    console.log(`✅ Gmail SMTP connection successful using ${smtpConfigs[currentConfigIndex].name}!`);
+    console.log(`✅ Email SMTP connection successful using ${smtpConfigs[currentConfigIndex].name}!`);
     return true;
   } else {
-    console.log('❌ All Gmail SMTP configurations failed');
-    console.log('📧 Using Gmail user:', process.env.GMAIL_USER);
-    console.log('🔐 Gmail pass length:', process.env.GMAIL_PASS ? process.env.GMAIL_PASS.length : 0);
-    console.log('💡 This may be due to Render network restrictions');
-    console.log('💡 Consider using a different email service or external SMTP relay');
+    console.log('❌ All email SMTP configurations failed');
+    console.log('💡 Render may be blocking outbound SMTP ports (465, 587)');
+    console.log('💡 To fix this, set up SendGrid:');
+    console.log('   1. Sign up at https://sendgrid.com (free tier: 100 emails/day)');
+    console.log('   2. Create API key in SendGrid dashboard');
+    console.log('   3. Add SENDGRID_API_KEY environment variable to Render');
+    console.log('   4. Add SENDGRID_FROM_EMAIL=thebibleoutdoor@gmail.com to Render');
     return false;
   }
 }
