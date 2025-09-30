@@ -91,8 +91,8 @@ async function sendAdminInvitationEmail(to, defaultPassword, inviteToken) {
         
         <!-- Header with Logo -->
         <div style="text-align: center; padding: 40px 20px 20px; background: linear-gradient(135deg, #0288d1 0%, #1565c0 100%);">
-          <div style="background: white; width: 80px; height: 80px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
-            <span style="font-size: 28px; font-weight: bold; color: #0288d1;">TBO</span>
+          <div style="background: white; width: 90px; height: 90px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); padding: 8px;">
+            <img src="https://res.cloudinary.com/dby5luwcf/image/upload/v1752499890/logo3_ckqlzk.png" alt="The Bible Outdoor Logo" style="width: 70px; height: 70px; object-fit: contain; border-radius: 50%;" />
           </div>
           <h1 style="color: white; margin: 0; font-size: 24px; font-weight: 600;">Welcome to The Bible Outdoor</h1>
           <p style="color: rgba(255,255,255,0.9); margin: 8px 0 0; font-size: 14px;">Admin Panel Invitation</p>
