@@ -2892,22 +2892,14 @@ function showUserInvitationDialog(email, link, defaultPassword) {
 async function addUserAndShowInvite(user) {
   try {
     const res = await addUser(user);
-    if (res && res.success) {
+    if (res && res.success && res.oneTimeLink && res.defaultPassword) {
+      showUserInvitationDialog(user.email, res.oneTimeLink, res.defaultPassword);
       logActivity('Added User', `Email: ${user.email}, Role: ${user.role}`);
-      
-      if (res.emailError && res.oneTimeLink && res.defaultPassword) {
-        // Email sending failed, show manual Gmail option
-        showUserInvitationDialog(user.email, res.oneTimeLink, res.defaultPassword);
-      } else {
-        // Email sent successfully by server
-        showNotification(res.message || 'Admin created successfully and invitation email sent automatically!', 'success');
-      }
     } else {
-      showNotification('Failed to add user.');
+      showNotification('User added, but no invitation link returned.');
     }
-  } catch (error) {
-    console.error('Error adding user:', error);
-    showNotification('Error adding user.');
+  } catch (err) {
+    showNotification('Failed to add user: ' + (err.message || err));
   }
 }
 
