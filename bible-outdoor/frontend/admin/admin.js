@@ -2864,27 +2864,30 @@ async function deleteTestimonyUI(id) {
 }
 window.deleteTestimonyUI = deleteTestimonyUI;
 
-// --- Show Invitation Link and Gmail Compose Helper ---
+// --- Show Invitation Success (Server sends email) ---
 function showUserInvitationDialog(email, link, defaultPassword) {
-  const gmailSubject = encodeURIComponent('Your Admin Account Invitation');
-  const gmailBody = encodeURIComponent(
-    `Hello,\n\nYou have been invited to join as an admin/editor for The Bible Outdoor.\n\nLogin link (valid 30 minutes): ${link}\nDefault password: ${defaultPassword}\n\nPlease use the link and password to log in within 30 minutes. You will be prompted to set a new password.\n\nIf you did not expect this, please ignore this email.`
-  );
-  const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(email)}&su=${gmailSubject}&body=${gmailBody}`;
-
+  // Don't open Gmail compose - server already sent the email
   showPopup(
     `<div style='text-align:center;max-width:400px;margin:auto;'>
-      <b>Admin Invitation Ready</b><br><br>
+      <div style='margin-bottom:1.5em;'>
+        <div style='width:60px;height:60px;margin:0 auto 1em;background:linear-gradient(135deg,#4caf50,#43a047);border-radius:50%;display:flex;align-items:center;justify-content:center;'>
+          <span style='color:white;font-size:28px;'>✓</span>
+        </div>
+        <b style='color:#43a047;font-size:1.2em;'>Invitation Email Sent!</b>
+      </div>
       <div style='margin-bottom:1.2em;'>
-        <span style='font-size:1.08em;'>Click the button below to send the invitation via Gmail.<br></span>
-        <span style='color:var(--text-alt);font-size:0.98em;display:block;margin-top:0.7em;'>The invitation link and default password will be included in the email. The link expires in <b>30 minutes</b> for security.</span>
-    </div>
-      <button onclick=\"window.open('${gmailUrl}','_blank')\" class='btn' style='margin-bottom:1.1em;'>Send via Gmail</button>
-      <div style='color:var(--text-alt);font-size:0.97em;margin-top:0.7em;'>
-        <b>Note:</b> The invited user will be required to change their password on first login.
+        <span style='font-size:1.05em;'>A professional invitation email has been sent to:</span><br>
+        <strong style='color:var(--primary);font-size:1.1em;margin-top:0.5em;display:block;'>${email}</strong>
+      </div>
+      <div style='color:var(--text-alt);font-size:0.95em;margin-top:1em;padding:1em;background:var(--bg-alt);border-radius:8px;'>
+        <b>The email includes:</b><br>
+        • Beautiful HTML design with TBO logo<br>
+        • Login credentials and secure link<br>
+        • 30-minute expiration for security<br>
+        • Instructions to change password on first login
       </div>
     </div>`,
-    { okText: 'Close' }
+    { okText: 'Done' }
   );
 }
 
